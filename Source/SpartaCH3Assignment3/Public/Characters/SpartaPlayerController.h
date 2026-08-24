@@ -17,7 +17,6 @@ class SPARTACH3ASSIGNMENT3_API ASpartaPlayerController : public APlayerControlle
   public:
 	ASpartaPlayerController();
 
-  protected:
 	// InputMappingContext & InputAction
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Properties|Input")
 	UInputMappingContext* CharacterInputMappingContext;  // IMC_Character
@@ -30,6 +29,7 @@ class SPARTACH3ASSIGNMENT3_API ASpartaPlayerController : public APlayerControlle
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Properties|Input")
 	UInputAction* SprintAction;  // IA_Sprint
 
+  protected:
 	// Callback Methods
 	virtual void BeginPlay() override;
 };
