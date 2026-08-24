@@ -131,11 +131,11 @@ void ASpartaCharacter::Move(const FInputActionValue& Value)
 
 	const FVector2D& MoveInput = Value.Get<FVector2D>();
 
-	if (FMath::IsNearlyZero(MoveInput.X))
+	if (!FMath::IsNearlyZero(MoveInput.X))
 	{
 		AddMovementInput(GetActorForwardVector(), MoveInput.X);
 	}
-	if (FMath::IsNearlyZero(MoveInput.Y))
+	if (!FMath::IsNearlyZero(MoveInput.Y))
 	{
 		AddMovementInput(GetActorRightVector(), MoveInput.Y);
 	}
