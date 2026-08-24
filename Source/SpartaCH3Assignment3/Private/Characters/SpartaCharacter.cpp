@@ -9,7 +9,7 @@
 
 ASpartaCharacter::ASpartaCharacter()
 {
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 
 	// Initialize Components
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("Spring Arm"));
@@ -68,11 +68,6 @@ void ASpartaCharacter::BeginPlay()
 
 	// 기본 속도 설정
 	GetCharacterMovement()->MaxWalkSpeed = NormalSpeed;
-}
-
-void ASpartaCharacter::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
 }
 
 void ASpartaCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)

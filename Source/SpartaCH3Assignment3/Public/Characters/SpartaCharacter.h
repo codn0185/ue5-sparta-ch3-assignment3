@@ -50,7 +50,6 @@ class SPARTACH3ASSIGNMENT3_API ASpartaCharacter : public ACharacter
   protected:
 	// Callback Methods
 	virtual void BeginPlay() override;
-	virtual void Tick(float DeltaTime) override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	// Input Events
