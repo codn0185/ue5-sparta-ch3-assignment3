@@ -15,10 +15,23 @@ ASpartaCharacter::ASpartaCharacter()
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("Spring Arm"));
 	SpringArm->SetupAttachment(RootComponent);
 	SpringArm->bUsePawnControlRotation = true;
+	SpringArm->bInheritPitch = true;
+	SpringArm->bInheritYaw = true;
+	SpringArm->bInheritRoll = false;
 
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	Camera->SetupAttachment(SpringArm, USpringArmComponent::SocketName);
 	Camera->bUsePawnControlRotation = false;
+
+	// Controller Settings
+	bUseControllerRotationPitch = false;
+	bUseControllerRotationYaw = false;
+	bUseControllerRotationRoll = false;
+
+	// Movement Settings
+	UCharacterMovementComponent* Movement = GetCharacterMovement();
+	Movement->bOrientRotationToMovement = true;
+	Movement->bUseControllerDesiredRotation = false;
 
 	// Health
 	MaxHealth = 100;
@@ -131,13 +144,30 @@ void ASpartaCharacter::Move(const FInputActionValue& Value)
 
 	const FVector2D& MoveInput = Value.Get<FVector2D>();
 
+	// 카메라 기준 방향 확인
+	const FVector CameraForward = Camera->GetForwardVector();
+	const FVector CameraRight = Camera->GetRightVector();
+
+	// Z축 방향 제거
+	FVector Forward = FVector(CameraForward.X, CameraForward.Y, 0.0f).GetSafeNormal();
+	if (Forward.IsNearlyZero())
+	{
+		Forward = GetActorForwardVector();
+	}
+	FVector Right = FVector(CameraRight.X, CameraRight.Y, 0.0f).GetSafeNormal();
+	if (Right.IsNearlyZero())
+	{
+		Right = GetActorRightVector();
+	}
+
+	// 이동
 	if (!FMath::IsNearlyZero(MoveInput.X))
 	{
-		AddMovementInput(GetActorForwardVector(), MoveInput.X);
+		AddMovementInput(Forward, MoveInput.X);
 	}
 	if (!FMath::IsNearlyZero(MoveInput.Y))
 	{
-		AddMovementInput(GetActorRightVector(), MoveInput.Y);
+		AddMovementInput(Right, MoveInput.Y);
 	}
 }
 
