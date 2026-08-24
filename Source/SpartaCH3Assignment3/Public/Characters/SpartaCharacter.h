@@ -9,6 +9,8 @@
 class USpringArmComponent;
 class UCameraComponent;
 
+struct FInputActionValue;
+
 UCLASS()
 class SPARTACH3ASSIGNMENT3_API ASpartaCharacter : public ACharacter
 {
@@ -30,6 +32,11 @@ class SPARTACH3ASSIGNMENT3_API ASpartaCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Properties|Health")
 	int32 Health;  // 현재 체력
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Properties|Movement")
+	float NormalSpeed;  // 기본 속도
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Properties|Movement")
+	float SprintSpeed;  // 달리기 속도
+
   public:
 	UFUNCTION(BlueprintCallable, Category = "Properties|Health")
 	void AddHealth(int32 Amount);  // 체력 회복
@@ -45,4 +52,18 @@ class SPARTACH3ASSIGNMENT3_API ASpartaCharacter : public ACharacter
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	// Input Events
+	UFUNCTION()
+	virtual void Move(const FInputActionValue& Value);
+	UFUNCTION()
+	virtual void Look(const FInputActionValue& Value);
+	UFUNCTION()
+	virtual void StartJump(const FInputActionValue& Value);
+	UFUNCTION()
+	virtual void StopJump(const FInputActionValue& Value);
+	UFUNCTION()
+	virtual void StartSprint(const FInputActionValue& Value);
+	UFUNCTION()
+	virtual void StopSprint(const FInputActionValue& Value);
 };
