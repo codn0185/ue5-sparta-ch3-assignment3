@@ -15,6 +15,30 @@ ASpartaCharacter::ASpartaCharacter()
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	Camera->SetupAttachment(SpringArm, USpringArmComponent::SocketName);
 	Camera->bUsePawnControlRotation = false;
+
+	// Health
+	MaxHealth = 100;
+	Health = MaxHealth;
+}
+
+void ASpartaCharacter::AddHealth(int32 Amount)
+{
+	Health = FMath::Clamp(Health + Amount, 0, MaxHealth);
+}
+
+bool ASpartaCharacter::IsDead() const
+{
+	return Health <= 0;
+}
+
+int32 ASpartaCharacter::GetMaxHealth() const
+{
+	return MaxHealth;
+}
+
+int32 ASpartaCharacter::GetHealth() const
+{
+	return Health;
 }
 
 void ASpartaCharacter::BeginPlay()
