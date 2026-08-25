@@ -65,4 +65,14 @@ class SPARTACH3ASSIGNMENT3_API ASpartaCharacter : public ACharacter
 	virtual void StartSprint(const FInputActionValue& Value);
 	UFUNCTION()
 	virtual void StopSprint(const FInputActionValue& Value);
+
+	// Events
+	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
+
+	UFUNCTION()
+	void OnDeath();
+
+	// Etc.
+	UFUNCTION()
+	void EnableRagdoll();
 };

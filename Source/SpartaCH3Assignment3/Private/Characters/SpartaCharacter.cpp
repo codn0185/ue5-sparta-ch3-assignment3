@@ -4,6 +4,7 @@
 
 #include "Camera/CameraComponent.h"
 #include "Characters/SpartaPlayerController.h"
+#include "Components/CapsuleComponent.h"
 #include "Core/SpartaGameState.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -231,7 +232,30 @@ void ASpartaCharacter::OnDeath()
 	{
 		if (ASpartaGameState* GameState = World->GetGameState<ASpartaGameState>())
 		{
-			// GameState->NotifyPlayerDead();
+			GameState->NotifyPlayerDead();
 		}
 	}
+
+	EnableRagdoll();
+}
+
+void ASpartaCharacter::EnableRagdoll()
+{
+	// 캐릭터 메시 확인
+	USkeletalMeshComponent* MeshComponent = GetMesh();
+	if (!MeshComponent)
+	{
+		return;
+	}
+
+	// 메시 설정
+	MeshComponent->Stop();                                    // 애니메이션 중지
+	MeshComponent->SetSimulatePhysics(true);                  //  물리 시뮬레이션 활성화
+	MeshComponent->SetCollisionProfileName(TEXT("Ragdoll"));  // 콜리전 프로파일 설정
+
+	// 캡슐 콜리전 비활성화
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+	// 캐릭터 이동 비활성화
+	GetCharacterMovement()->DisableMovement();
 }
