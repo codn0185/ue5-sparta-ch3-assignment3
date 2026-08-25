@@ -16,8 +16,7 @@ void ACoinItem::Activate(AActor* Activator)
 		{
 			if (ASpartaGameState* GameState = World->GetGameState<ASpartaGameState>())
 			{
-				GameState->AddScore(ScoreValue);
-				GameState->OnCoinCollected();
+				GameState->NotifyCoinCollected(ScoreValue);
 			}
 		}
 

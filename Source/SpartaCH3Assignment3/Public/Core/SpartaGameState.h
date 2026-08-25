@@ -15,31 +15,24 @@ class SPARTACH3ASSIGNMENT3_API ASpartaGameState : public AGameState
 	ASpartaGameState();
 
   protected:
-	// Life Cycle Methods
 	virtual void BeginPlay() override;
-	void StartLevel();
-	void EndLevel();
 
-  public:
-	// Event Methods
-	void OnCoinCollected();
+	// Life Cycles
+	void InitializeLevel();
+	void ClearStage();
+
+	// Events
 	void OnTimeExpired();
-	void OnPlayerDead();
-
-  protected:
-	// Handler Methods
-	void HandleGameOver();
-	void HandleGameCleared();
 
   public:
-	// Modifier Methods
-	UFUNCTION(BlueprintCallable, Category = "Actions|Score")
-	void AddScore(int32 Amount);
+	// Notifies
+	void NotifyCoinCollected(int32 Score);
+	void NotifyPlayerDead();
 
   protected:
 	// Game Data
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "GameData|Score")
-	int32 Score;
+	int32 StageScore;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "GameData|Coin")
 	int32 SpawnedCoinCount;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "GameData|Coin")

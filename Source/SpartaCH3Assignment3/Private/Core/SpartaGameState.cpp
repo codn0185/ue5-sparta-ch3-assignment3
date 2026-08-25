@@ -9,7 +9,7 @@ ASpartaGameState::ASpartaGameState()
 	PrimaryActorTick.bCanEverTick = false;
 
 	// GameData
-	Score = 0;
+	StageScore = 0;
 	SpawnedCoinCount = 0;
 	CollectedCointCount = 0;
 }
@@ -29,7 +29,7 @@ void ASpartaGameState::InitializeLevel()
 	UDataTable *ItemDataTable = nullptr;
 
 	// GameData 초기화
-	Score = 0;
+	StageScore = 0;
 	SpawnedCoinCount = 0;
 	CollectedCointCount = 0;
 
@@ -94,7 +94,7 @@ void ASpartaGameState::OnTimeExpired()
 void ASpartaGameState::NotifyCoinCollected(int32 Score)
 {
 	CollectedCointCount++;
-	Score += Score;
+	StageScore += Score;
 	// TODO: GameInstance의 전역 점수에 적용
 
 	// 스테이지 클리어 조건 만족
