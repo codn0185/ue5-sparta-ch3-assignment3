@@ -19,15 +19,15 @@ class SPARTACH3ASSIGNMENT3_API ASpartaPlayerController : public APlayerControlle
 
 	// InputMappingContext & InputAction
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Properties|Input")
-	UInputMappingContext* CharacterInputMappingContext;  // IMC_Character
+	TObjectPtr<UInputMappingContext> CharacterInputMappingContext;  // IMC_Character
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Properties|Input")
-	UInputAction* MoveAction;  // IA_Move
+	TObjectPtr<UInputAction> MoveAction;  // IA_Move
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Properties|Input")
-	UInputAction* LookAction;  // IA_Look
+	TObjectPtr<UInputAction> LookAction;  // IA_Look
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Properties|Input")
-	UInputAction* JumpAction;  // IA_Jump
+	TObjectPtr<UInputAction> JumpAction;  // IA_Jump
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Properties|Input")
-	UInputAction* SprintAction;  // IA_Sprint
+	TObjectPtr<UInputAction> SprintAction;  // IA_Sprint
 
   protected:
 	// Callback Methods
