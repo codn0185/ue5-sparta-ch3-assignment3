@@ -4,6 +4,7 @@
 
 #include "Camera/CameraComponent.h"
 #include "Characters/SpartaPlayerController.h"
+#include "Core/SpartaGameState.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 
@@ -208,5 +209,29 @@ void ASpartaCharacter::StopSprint(const FInputActionValue& Value)
 	if (GetCharacterMovement())
 	{
 		GetCharacterMovement()->MaxWalkSpeed = NormalSpeed;
+	}
+}
+
+float ASpartaCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
+{
+	float ActualDamage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+
+	Health = FMath::Clamp(Health - ActualDamage, 0, MaxHealth);
+	if (Health <= 0)
+	{
+		OnDeath();
+	}
+
+	return ActualDamage;
+}
+
+void ASpartaCharacter::OnDeath()
+{
+	if (UWorld* World = GetWorld())
+	{
+		if (ASpartaGameState* GameState = World->GetGameState<ASpartaGameState>())
+		{
+			// GameState->NotifyPlayerDead();
+		}
 	}
 }
