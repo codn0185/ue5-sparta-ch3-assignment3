@@ -22,7 +22,7 @@ class SPARTACH3ASSIGNMENT3_API ASpawnVolume : public AActor
 	UBoxComponent* SpawnBox;
 
 	// Properties
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties", meta = (ClampMin = "0.0", UIMin = "0.0"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Properties", meta = (ClampMin = "0.0", UIMin = "0.0"))
 	FVector SpawnMargin;  // 소환 마진
 
   public:
