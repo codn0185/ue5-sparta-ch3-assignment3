@@ -17,5 +17,7 @@ struct FStageDataRow : public FTableRowBase
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float TimeLimit;  // 제한 시간
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 ItemCount;  // 아이템 개수
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UDataTable* ItemSpawnTable;  // 아이템 소환 테이블
 };
