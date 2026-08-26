@@ -1,5 +1,7 @@
 #include "Core/SpartaGameState.h"
 
+#include "Core/SpartaGameInstance.h"
+#include "Data/StageDataRow.h"
 #include "Items/CoinItem.h"
 #include "Kismet/GameplayStatics.h"
 #include "World/SpawnVolume.h"
@@ -23,10 +25,22 @@ void ASpartaGameState::BeginPlay()
 
 void ASpartaGameState::InitializeLevel()
 {
-	// TODO: GameInstance에서 현재 스테이지의 제한 시간, 소환 개수, 아이템 데이터 테이블 받아오기
-	float Duration = 0.f;
+	UE_LOG(LogTemp, Warning, TEXT("ASpartaGameState::InitializeLevel()"));
+
+	// GameInstance에서 현재 스테이지의 제한 시간, 소환 개수, 아이템 데이터 테이블 받아오기
+	float StageDuration = 0.f;
 	int32 SpawnItemCount = 0;
 	UDataTable *ItemDataTable = nullptr;
+	if (UGameInstance *GameInstance = GetGameInstance())
+	{
+		if (USpartaGameInstance *SpartaGameInstance = Cast<USpartaGameInstance>(GameInstance))
+		{
+			const FStageDataRow *StageDate = SpartaGameInstance->GetCurrentStageData();
+			StageDuration = StageDate->TimeLimit;
+			SpawnItemCount = StageDate->ItemCount;
+			ItemDataTable = StageDate->ItemSpawnTable;
+		}
+	}
 
 	// GameData 초기화
 	StageScore = 0;
@@ -73,16 +87,25 @@ void ASpartaGameState::InitializeLevel()
 		LevelTimerHandle,
 		this,
 		&ASpartaGameState::OnTimeExpired,
-		Duration,
+		StageDuration,
 		false);
 }
 
 void ASpartaGameState::ClearStage()
 {
+	UE_LOG(LogTemp, Warning, TEXT("ASpartaGameState::ClearStage()"));
+
 	// 타이머 정리
 	GetWorldTimerManager().ClearTimer(LevelTimerHandle);
 
-	// TODO: GameInstance의 OnStageClear() 호출
+	// GameInstance의 OnStageClear() 호출 - 다음 스테이지 진행 or 게임 클리어
+	if (UGameInstance *GameInstance = GetGameInstance())
+	{
+		if (USpartaGameInstance *SpartaGameInstance = Cast<USpartaGameInstance>(GameInstance))
+		{
+			SpartaGameInstance->OnStageClear();
+		}
+	}
 }
 
 void ASpartaGameState::OnTimeExpired()
@@ -95,7 +118,15 @@ void ASpartaGameState::NotifyCoinCollected(int32 Score)
 {
 	CollectedCointCount++;
 	StageScore += Score;
-	// TODO: GameInstance의 전역 점수에 적용
+
+	// GameInstance의 전역 점수에 추가
+	if (UGameInstance *GameInstance = GetGameInstance())
+	{
+		if (USpartaGameInstance *SpartaGameInstance = Cast<USpartaGameInstance>(GameInstance))
+		{
+			SpartaGameInstance->AddScore(Score);
+		}
+	}
 
 	// 스테이지 클리어 조건 만족
 	if (CollectedCointCount >= SpawnedCoinCount)
@@ -107,5 +138,13 @@ void ASpartaGameState::NotifyCoinCollected(int32 Score)
 void ASpartaGameState::NotifyPlayerDead()
 {
 	UE_LOG(LogTemp, Warning, TEXT("Player Dead"));
-	// TODO: GameInstance의 OnGameOver() 호출
+
+	// GameInstance의 OnGameOver() 호출
+	if (UGameInstance *GameInstance = GetGameInstance())
+	{
+		if (USpartaGameInstance *SpartaGameInstance = Cast<USpartaGameInstance>(GameInstance))
+		{
+			SpartaGameInstance->OnGameOver();
+		}
+	}
 }
