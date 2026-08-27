@@ -258,7 +258,7 @@ void ASpartaCharacter::UpdateSpeed()
 {
 	float Multiplier = 1.f;
 
-	for (int32 Index = 0; Index < SpeedEffects.Num(); Index++)
+	for (int32 Index = SpeedEffects.Num() - 1; Index >= 0; Index--)
 	{
 		const FSpeedEffect& SpeedEffect = SpeedEffects[Index];
 
@@ -269,7 +269,7 @@ void ASpartaCharacter::UpdateSpeed()
 		}
 		else  // 속도 효과 종료 -> 제거
 		{
-			SpeedEffects.RemoveAtSwap(Index--);
+			SpeedEffects.RemoveAtSwap(Index);
 		}
 	}
 
