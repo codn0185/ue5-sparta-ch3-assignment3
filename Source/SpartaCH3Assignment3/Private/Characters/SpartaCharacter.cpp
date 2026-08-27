@@ -40,8 +40,11 @@ ASpartaCharacter::ASpartaCharacter()
 	Health = MaxHealth;
 
 	// Movement
-	NormalSpeed = 600.f;
-	SprintSpeed = 1000.f;
+	MovementSpeedState = EMovementSpeedState::Walk;
+	// MovementSpeedMap[EMovementSpeedState::Walk] = 600.f;
+	// MovementSpeedMap[EMovementSpeedState::Sprint] = 1000.f;
+	MovementSpeedMap.Add(EMovementSpeedState::Walk, 600.f);
+	MovementSpeedMap.Add(EMovementSpeedState::Sprint, 1000.f);
 }
 
 void ASpartaCharacter::AddHealth(int32 Amount)
@@ -68,8 +71,8 @@ void ASpartaCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// 기본 속도 설정
-	GetCharacterMovement()->MaxWalkSpeed = NormalSpeed;
+	// 속도 설정
+	UpdateSpeed();
 }
 
 void ASpartaCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -199,18 +202,14 @@ void ASpartaCharacter::StopJump(const FInputActionValue& Value)
 
 void ASpartaCharacter::StartSprint(const FInputActionValue& Value)
 {
-	if (GetCharacterMovement())
-	{
-		GetCharacterMovement()->MaxWalkSpeed = SprintSpeed;
-	}
+	MovementSpeedState = EMovementSpeedState::Sprint;
+	UpdateSpeed();
 }
 
 void ASpartaCharacter::StopSprint(const FInputActionValue& Value)
 {
-	if (GetCharacterMovement())
-	{
-		GetCharacterMovement()->MaxWalkSpeed = NormalSpeed;
-	}
+	MovementSpeedState = EMovementSpeedState::Walk;
+	UpdateSpeed();
 }
 
 float ASpartaCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
@@ -237,6 +236,50 @@ void ASpartaCharacter::OnDeath()
 	}
 
 	EnableRagdoll();
+}
+
+void ASpartaCharacter::ApplySpeedEffect(float Multiplier, float Duration)
+{
+	FSpeedEffect& SpeedEffect = SpeedEffects.AddDefaulted_GetRef();  // 기본 값 생성 및 참조
+	SpeedEffect.Multiplier = Multiplier;
+
+	GetWorldTimerManager().SetTimer(
+		SpeedEffect.TimerHandle,
+		this,
+		&ASpartaCharacter::UpdateSpeed,
+		Duration,
+		false);
+
+	UpdateSpeed();
+}
+
+void ASpartaCharacter::UpdateSpeed()
+{
+	float Multipier = 1.f;
+
+	for (int32 Index = 0; Index < SpeedEffects.Num(); Index++)
+	{
+		const FSpeedEffect& SpeedEffect = SpeedEffects[Index];
+
+		// 속도 효과 적용 중
+		if (GetWorldTimerManager().IsTimerActive(SpeedEffect.TimerHandle))
+		{
+			Multipier *= SpeedEffect.Multiplier;
+		}
+		else  // 속도 효과 종료 -> 제거
+		{
+			SpeedEffects.RemoveAtSwap(Index--);
+		}
+	}
+
+	// 속도 적용
+	if (GetCharacterMovement())
+	{
+		if (MovementSpeedMap.Contains(MovementSpeedState))
+		{
+			GetCharacterMovement()->MaxWalkSpeed = MovementSpeedMap[MovementSpeedState] * Multipier;
+		}
+	}
 }
 
 void ASpartaCharacter::EnableRagdoll()

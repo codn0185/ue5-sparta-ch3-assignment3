@@ -11,6 +11,25 @@ class UCameraComponent;
 
 struct FInputActionValue;
 
+USTRUCT(BlueprintType)
+struct FSpeedEffect
+{
+	GENERATED_BODY();
+
+  public:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	float Multiplier;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	FTimerHandle TimerHandle;
+};
+
+UENUM(BlueprintType)
+enum class EMovementSpeedState : uint8
+{
+	Walk,
+	Sprint,
+};
+
 UCLASS()
 class SPARTACH3ASSIGNMENT3_API ASpartaCharacter : public ACharacter
 {
@@ -33,9 +52,12 @@ class SPARTACH3ASSIGNMENT3_API ASpartaCharacter : public ACharacter
 	int32 Health;  // 현재 체력
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Properties|Movement")
-	float NormalSpeed;  // 기본 속도
+	EMovementSpeedState MovementSpeedState;  // 현재 이동 속도 상태
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Properties|Movement")
-	float SprintSpeed;  // 달리기 속도
+	TMap<EMovementSpeedState, float> MovementSpeedMap;  // 이동 상태 별 속도 값
+
+	// Effects
+	TArray<FSpeedEffect> SpeedEffects;
 
   public:
 	UFUNCTION(BlueprintCallable, Category = "Properties|Health")
@@ -71,6 +93,12 @@ class SPARTACH3ASSIGNMENT3_API ASpartaCharacter : public ACharacter
 
 	UFUNCTION()
 	void OnDeath();
+
+	// Effects
+	UFUNCTION(BlueprintCallable, Category = "Effects|Speed")
+	void ApplySpeedEffect(float Mcultiplier, float Duration);
+	UFUNCTION(BlueprintCallable, Category = "Effects|Speed")
+	void UpdateSpeed();
 
 	// Etc.
 	UFUNCTION()
