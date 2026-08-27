@@ -69,6 +69,10 @@ class SPARTACH3ASSIGNMENT3_API ASpartaCharacter : public ACharacter
 	UFUNCTION(BlueprintPure, Category = "Properties|Health")
 	int32 GetHealth() const;  // 현재 체력 반환
 
+	// Effects
+	UFUNCTION(BlueprintCallable, Category = "Effects|Speed")
+	void ApplySpeedEffect(float Multiplier, float Duration);
+
   protected:
 	// Callback Methods
 	virtual void BeginPlay() override;
@@ -94,9 +98,7 @@ class SPARTACH3ASSIGNMENT3_API ASpartaCharacter : public ACharacter
 	UFUNCTION()
 	void OnDeath();
 
-	// Effects
-	UFUNCTION(BlueprintCallable, Category = "Effects|Speed")
-	void ApplySpeedEffect(float Mcultiplier, float Duration);
+	// Speed
 	UFUNCTION(BlueprintCallable, Category = "Effects|Speed")
 	void UpdateSpeed();
 

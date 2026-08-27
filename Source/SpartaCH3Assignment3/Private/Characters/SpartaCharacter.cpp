@@ -67,6 +67,20 @@ int32 ASpartaCharacter::GetHealth() const
 	return Health;
 }
 
+void ASpartaCharacter::ApplySpeedEffect(float Multiplier, float Duration)
+{
+	FSpeedEffect& SpeedEffect = SpeedEffects.AddDefaulted_GetRef();  // 기본 값 생성 및 참조
+	SpeedEffect.Multiplier = Multiplier;
+
+	GetWorldTimerManager().SetTimer(
+		SpeedEffect.TimerHandle,
+		this,
+		&ASpartaCharacter::UpdateSpeed,
+		Duration,
+		false);
+
+	UpdateSpeed();
+}
 void ASpartaCharacter::BeginPlay()
 {
 	Super::BeginPlay();
@@ -236,21 +250,6 @@ void ASpartaCharacter::OnDeath()
 	}
 
 	EnableRagdoll();
-}
-
-void ASpartaCharacter::ApplySpeedEffect(float Multiplier, float Duration)
-{
-	FSpeedEffect& SpeedEffect = SpeedEffects.AddDefaulted_GetRef();  // 기본 값 생성 및 참조
-	SpeedEffect.Multiplier = Multiplier;
-
-	GetWorldTimerManager().SetTimer(
-		SpeedEffect.TimerHandle,
-		this,
-		&ASpartaCharacter::UpdateSpeed,
-		Duration,
-		false);
-
-	UpdateSpeed();
 }
 
 void ASpartaCharacter::UpdateSpeed()
