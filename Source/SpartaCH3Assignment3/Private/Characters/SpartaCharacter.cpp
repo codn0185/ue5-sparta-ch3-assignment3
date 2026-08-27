@@ -79,6 +79,7 @@ void ASpartaCharacter::ApplySpeedEffect(float Multiplier, float Duration)
 
 	UpdateSpeed();
 }
+
 void ASpartaCharacter::BeginPlay()
 {
 	Super::BeginPlay();
