@@ -61,9 +61,15 @@ class SPARTACH3ASSIGNMENT3_API ASpartaCharacter : public ACharacter
 	TMap<EMovementSpeedState, float> MovementSpeedMap;  // 이동 상태 별 속도 값
 
 	// Effects
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Effects|Speed")
 	TArray<FSpeedEffect> SpeedEffects;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Effects|ReverseContol")
+	bool bIsReversingControl;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Effects|ReverseContol")
+	FTimerHandle ReverseControlTimerHandle;
 
   public:
+	// Properties
 	UFUNCTION(BlueprintCallable, Category = "Properties|Health")
 	void AddHealth(int32 Amount);  // 체력 회복
 	UFUNCTION(BlueprintPure, Category = "Properties|Health")
@@ -76,6 +82,8 @@ class SPARTACH3ASSIGNMENT3_API ASpartaCharacter : public ACharacter
 	// Effects
 	UFUNCTION(BlueprintCallable, Category = "Effects|Speed")
 	void ApplySpeedEffect(float Multiplier, float Duration);
+	UFUNCTION(BlueprintCallable, Category = "Effects|ReverseContol")
+	void ApplyReverseControl(float Duration);
 
   protected:
 	// Callback Methods
@@ -105,6 +113,8 @@ class SPARTACH3ASSIGNMENT3_API ASpartaCharacter : public ACharacter
 	// Speed
 	UFUNCTION(BlueprintCallable, Category = "Effects|Speed")
 	void UpdateSpeed();
+	UFUNCTION(BlueprintCallable, Category = "Effects|ReverseContol")
+	void UpdateReverseControl();
 
 	// Etc.
 	UFUNCTION()

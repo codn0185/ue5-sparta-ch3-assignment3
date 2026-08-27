@@ -46,6 +46,9 @@ ASpartaCharacter::ASpartaCharacter()
 	MovementSpeedState = EMovementSpeedState::Walk;
 	MovementSpeedMap.Add(EMovementSpeedState::Walk, 600.f);
 	MovementSpeedMap.Add(EMovementSpeedState::Sprint, 1000.f);
+
+	// Effects
+	bIsReversingControl = false;
 }
 
 void ASpartaCharacter::AddHealth(int32 Amount)
@@ -81,6 +84,22 @@ void ASpartaCharacter::ApplySpeedEffect(float Multiplier, float Duration)
 		false);
 
 	UpdateSpeed();
+}
+
+void ASpartaCharacter::ApplyReverseControl(float Duration)
+{
+	// 기존의 남은 시간보다 크면 새로 설정
+	if (GetWorldTimerManager().IsTimerActive(ReverseControlTimerHandle) && Duration > GetWorldTimerManager().GetTimerRemaining(ReverseControlTimerHandle))
+	{
+		GetWorldTimerManager().SetTimer(
+			ReverseControlTimerHandle,
+			this,
+			&ASpartaCharacter::UpdateReverseControl,
+			Duration,
+			false);
+
+		UpdateReverseControl();
+	}
 }
 
 void ASpartaCharacter::BeginPlay()
@@ -158,7 +177,8 @@ void ASpartaCharacter::Move(const FInputActionValue& Value)
 		return;
 	}
 
-	const FVector2D& MoveInput = Value.Get<FVector2D>();
+	// 입력 값 확인
+	const FVector2D& MoveInput = bIsReversingControl ? -Value.Get<FVector2D>() : Value.Get<FVector2D>();
 
 	// 카메라 기준 방향 확인
 	const FVector CameraForward = Camera->GetForwardVector();
@@ -278,6 +298,20 @@ void ASpartaCharacter::UpdateSpeed()
 	if (GetCharacterMovement())
 	{
 		GetCharacterMovement()->MaxWalkSpeed = FMath::Clamp(BaseSpeed * Multiplier, MinMovementSpeed, MaxMovementSpeed);
+	}
+}
+
+void ASpartaCharacter::UpdateReverseControl()
+{
+	// 조작 반전 적용 중
+	if (GetWorldTimerManager().IsTimerActive(ReverseControlTimerHandle) && GetWorldTimerManager().GetTimerRemaining(ReverseControlTimerHandle) > 0.f)
+	{
+		bIsReversingControl = true;
+	}
+	// 조작 반전 해제
+	else
+	{
+		bIsReversingControl = false;
 	}
 }
 
