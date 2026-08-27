@@ -253,7 +253,7 @@ void ASpartaCharacter::OnDeath()
 
 void ASpartaCharacter::UpdateSpeed()
 {
-	float Multipier = 1.f;
+	float Multiplier = 1.f;
 
 	for (int32 Index = 0; Index < SpeedEffects.Num(); Index++)
 	{
@@ -262,7 +262,7 @@ void ASpartaCharacter::UpdateSpeed()
 		// 속도 효과 적용 중
 		if (GetWorldTimerManager().IsTimerActive(SpeedEffect.TimerHandle))
 		{
-			Multipier *= SpeedEffect.Multiplier;
+			Multiplier *= SpeedEffect.Multiplier;
 		}
 		else  // 속도 효과 종료 -> 제거
 		{
@@ -275,7 +275,7 @@ void ASpartaCharacter::UpdateSpeed()
 	{
 		if (MovementSpeedMap.Contains(MovementSpeedState))
 		{
-			GetCharacterMovement()->MaxWalkSpeed = MovementSpeedMap[MovementSpeedState] * Multipier;
+			GetCharacterMovement()->MaxWalkSpeed = MovementSpeedMap[MovementSpeedState] * Multiplier;
 		}
 	}
 }
