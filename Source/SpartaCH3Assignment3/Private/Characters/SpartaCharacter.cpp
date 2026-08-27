@@ -40,6 +40,9 @@ ASpartaCharacter::ASpartaCharacter()
 	Health = MaxHealth;
 
 	// Movement
+	MinMovementSpeed = 100.f;
+	MaxMovementSpeed = 3000.f;
+
 	MovementSpeedState = EMovementSpeedState::Walk;
 	MovementSpeedMap.Add(EMovementSpeedState::Walk, 600.f);
 	MovementSpeedMap.Add(EMovementSpeedState::Sprint, 1000.f);
@@ -271,12 +274,10 @@ void ASpartaCharacter::UpdateSpeed()
 	}
 
 	// 속도 적용
+	const float BaseSpeed = MovementSpeedMap.FindRef(MovementSpeedState);
 	if (GetCharacterMovement())
 	{
-		if (MovementSpeedMap.Contains(MovementSpeedState))
-		{
-			GetCharacterMovement()->MaxWalkSpeed = MovementSpeedMap[MovementSpeedState] * Multiplier;
-		}
+		GetCharacterMovement()->MaxWalkSpeed = FMath::Clamp(BaseSpeed * Multiplier, MinMovementSpeed, MaxMovementSpeed);
 	}
 }
 

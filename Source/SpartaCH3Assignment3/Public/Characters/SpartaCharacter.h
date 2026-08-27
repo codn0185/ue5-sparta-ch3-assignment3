@@ -51,6 +51,10 @@ class SPARTACH3ASSIGNMENT3_API ASpartaCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Properties|Health")
 	int32 Health;  // 현재 체력
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Properties|Movement", meta = (ClampMin = "0", UIMin = "0"))
+	float MinMovementSpeed;  // 최소 속도
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Properties|Movement", meta = (ClampMin = "100", UIMin = "100"))
+	float MaxMovementSpeed;  // 최대 속도
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Properties|Movement")
 	EMovementSpeedState MovementSpeedState;  // 현재 이동 속도 상태
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Properties|Movement")
