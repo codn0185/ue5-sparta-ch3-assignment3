@@ -263,7 +263,7 @@ void ASpartaCharacter::UpdateSpeed()
 		const FSpeedEffect& SpeedEffect = SpeedEffects[Index];
 
 		// 속도 효과 적용 중
-		if (GetWorldTimerManager().IsTimerActive(SpeedEffect.TimerHandle))
+		if (GetWorldTimerManager().IsTimerActive(SpeedEffect.TimerHandle) && GetWorldTimerManager().GetTimerRemaining(SpeedEffect.TimerHandle) > 0.f)
 		{
 			Multiplier *= SpeedEffect.Multiplier;
 		}
