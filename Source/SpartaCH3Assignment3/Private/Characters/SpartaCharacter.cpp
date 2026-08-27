@@ -88,8 +88,8 @@ void ASpartaCharacter::ApplySpeedEffect(float Multiplier, float Duration)
 
 void ASpartaCharacter::ApplyReverseControl(float Duration)
 {
-	// 기존의 남은 시간보다 크면 새로 설정
-	if (GetWorldTimerManager().IsTimerActive(ReverseControlTimerHandle) && Duration > GetWorldTimerManager().GetTimerRemaining(ReverseControlTimerHandle))
+	// 활성화된 효과가 없거나 OR 기존의 남은 시간보다 크면 새로 설정
+	if (!GetWorldTimerManager().IsTimerActive(ReverseControlTimerHandle) || Duration > GetWorldTimerManager().GetTimerRemaining(ReverseControlTimerHandle))
 	{
 		GetWorldTimerManager().SetTimer(
 			ReverseControlTimerHandle,
