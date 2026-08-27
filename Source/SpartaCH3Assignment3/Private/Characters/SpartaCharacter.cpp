@@ -41,8 +41,6 @@ ASpartaCharacter::ASpartaCharacter()
 
 	// Movement
 	MovementSpeedState = EMovementSpeedState::Walk;
-	// MovementSpeedMap[EMovementSpeedState::Walk] = 600.f;
-	// MovementSpeedMap[EMovementSpeedState::Sprint] = 1000.f;
 	MovementSpeedMap.Add(EMovementSpeedState::Walk, 600.f);
 	MovementSpeedMap.Add(EMovementSpeedState::Sprint, 1000.f);
 }
