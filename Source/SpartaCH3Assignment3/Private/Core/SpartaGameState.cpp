@@ -149,3 +149,15 @@ void ASpartaGameState::NotifyPlayerDead()
 		}
 	}
 }
+
+void ASpartaGameState::StartItemSpawn()
+{
+}
+
+void ASpartaGameState::StartSpikeTrapSpawn()
+{
+}
+
+void ASpartaGameState::StartFallingObjectSpawn()
+{
+}

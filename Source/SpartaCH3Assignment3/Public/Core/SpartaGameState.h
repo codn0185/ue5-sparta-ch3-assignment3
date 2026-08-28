@@ -40,4 +40,12 @@ class SPARTACH3ASSIGNMENT3_API ASpartaGameState : public AGameState
 
 	UPROPERTY()
 	FTimerHandle LevelTimerHandle;
+
+  private:
+	UFUNCTION(BlueprintCallable)
+	void StartItemSpawn();
+	UFUNCTION(BlueprintCallable)
+	void StartSpikeTrapSpawn();
+	UFUNCTION(BlueprintCallable)
+	void StartFallingObjectSpawn();
 };
