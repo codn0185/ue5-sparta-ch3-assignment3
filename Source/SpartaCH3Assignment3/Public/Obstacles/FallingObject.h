@@ -21,8 +21,6 @@ class SPARTACH3ASSIGNMENT3_API AFallingObject : public AActor, public IInteracta
 	// Components
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	UStaticMeshComponent* StaticMesh;
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
-	USphereComponent* DamageCollision;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Properties")
 	FName Type;

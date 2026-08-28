@@ -16,9 +16,6 @@ AFallingObject::AFallingObject()
 	StaticMesh->SetNotifyRigidBodyCollision(true);
 	StaticMesh->OnComponentHit.AddDynamic(this, &AFallingObject::OnHit);
 
-	DamageCollision = CreateDefaultSubobject<USphereComponent>(TEXT("Damage Collision"));
-	DamageCollision->SetupAttachment(StaticMesh);
-
 	// Initialize Properties
 	Type = "FallingObject";
 	Damage = 20;
