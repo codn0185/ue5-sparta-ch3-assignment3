@@ -81,4 +81,8 @@ class SPARTACH3ASSIGNMENT3_API ASpikeTrap : public AActor, public IInteractableI
 		int32 OtherBodyIndex) override;
 	virtual void Activate(AActor* Activator) override;
 	virtual FName GetType() const override;
+
+  public:
+	UFUNCTION(BlueprintPure, Category = "Properties")
+	FVector GetSize() const;
 };

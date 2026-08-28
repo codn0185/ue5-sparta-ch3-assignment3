@@ -166,3 +166,8 @@ FName ASpikeTrap::GetType() const
 {
 	return Type;
 }
+
+FVector ASpikeTrap::GetSize() const
+{
+	return PlatformMesh->Bounds.BoxExtent * 2.f;
+}
