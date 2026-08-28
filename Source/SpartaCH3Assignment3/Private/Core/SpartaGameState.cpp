@@ -4,7 +4,7 @@
 #include "Data/StageDataRow.h"
 #include "Items/CoinItem.h"
 #include "Kismet/GameplayStatics.h"
-#include "World/SpawnVolume.h"
+#include "World/ItemSpawnVolume.h"
 
 ASpartaGameState::ASpartaGameState()
 {
@@ -49,7 +49,7 @@ void ASpartaGameState::InitializeLevel()
 
 	// SpawnVolume 찾기
 	TArray<AActor *> SpawnVolumes;
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ASpawnVolume::StaticClass(), SpawnVolumes);
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AItemSpawnVolume::StaticClass(), SpawnVolumes);
 
 	if (SpawnVolumes.IsEmpty())
 	{
@@ -57,17 +57,18 @@ void ASpartaGameState::InitializeLevel()
 		return;
 	}
 
-	ASpawnVolume *SpawnVolume = Cast<ASpawnVolume>(SpawnVolumes[0]);
-	if (!SpawnVolume)
+	AItemSpawnVolume *ItemSpawnVolume = Cast<AItemSpawnVolume>(SpawnVolumes[0]);
+	if (!ItemSpawnVolume)
 	{
 		UE_LOG(LogTemp, Error, TEXT("AMyGameState::BeginPlay - No SpawnVolume In Current Level"));
 		return;
 	}
 
 	// 아이템 소환
+	ItemSpawnVolume->SetItemSpawnTable(ItemDataTable);
 	for (int i = 0; i < SpawnItemCount; i++)
 	{
-		AActor *SpawnedActor = SpawnVolume->SpawnRandomItem(ItemDataTable);
+		AActor *SpawnedActor = ItemSpawnVolume->SpawnActor();
 		if (SpawnedActor && SpawnedActor->IsA(ACoinItem::StaticClass()))
 		{
 			SpawnedCoinCount++;
