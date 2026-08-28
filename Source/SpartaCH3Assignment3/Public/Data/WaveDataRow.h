@@ -22,10 +22,6 @@ struct FWaveDataRow : public FTableRowBase
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int32 SpikeTrapCount;  // 가시 발판 개수
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float SpikeTrapActiveDuration;  // 가시 발판 활성화 시간 (초)
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float SpikeTrapInactiveDuration;  // 가시 발판 비활성화 시간 (초)
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int32 FallingObstacleCount;  // 낙하 장애물 동시 소환 개수
