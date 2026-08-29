@@ -11,6 +11,18 @@ class SPARTACH3ASSIGNMENT3_API ASpartaGameState : public AGameState
 {
 	GENERATED_BODY()
 
+  protected:
+	// Game Data
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "GameData|Score")
+	int32 StageScore;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "GameData|Coin")
+	int32 SpawnedCoinCount;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "GameData|Coin")
+	int32 CollectedCointCount;
+
+	UPROPERTY()
+	FTimerHandle LevelTimerHandle;
+
   public:
 	ASpartaGameState();
 
@@ -28,18 +40,6 @@ class SPARTACH3ASSIGNMENT3_API ASpartaGameState : public AGameState
 	// Notifies
 	void NotifyCoinCollected(int32 Score);
 	void NotifyPlayerDead();
-
-  protected:
-	// Game Data
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "GameData|Score")
-	int32 StageScore;
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "GameData|Coin")
-	int32 SpawnedCoinCount;
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "GameData|Coin")
-	int32 CollectedCointCount;
-
-	UPROPERTY()
-	FTimerHandle LevelTimerHandle;
 
   private:
 	UFUNCTION(BlueprintCallable)
