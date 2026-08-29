@@ -2,6 +2,8 @@
 
 #include "CoreMinimal.h"
 
+#include "Data/StageDataRow.h"
+#include "Data/WaveDataRow.h"
 #include "GameFramework/GameState.h"
 
 #include "SpartaGameState.generated.h"
@@ -12,16 +14,27 @@ class SPARTACH3ASSIGNMENT3_API ASpartaGameState : public AGameState
 	GENERATED_BODY()
 
   protected:
-	// Game Data
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "GameData|Score")
+	// Stage
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Stage|Data")
+	FStageDataRow StageData;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Stage|State")
 	int32 StageScore;
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "GameData|Coin")
+
+	// Wave
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Wave|Data")
+	FWaveDataRow WaveData;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Wave|State")
+	int32 CurrentWaveIndex;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Wave|State")
 	int32 SpawnedCoinCount;
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "GameData|Coin")
-	int32 CollectedCointCount;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Wave|State")
+	int32 CollectedCoinCount;
 
 	UPROPERTY()
-	FTimerHandle LevelTimerHandle;
+	FTimerHandle WaveTimerHandle;
+
+  private:
+	TArray<TObjectPtr<AActor>> WaveActors;  // 현재 웨이브 동안 관리하는 액터
 
   public:
 	ASpartaGameState();
@@ -29,9 +42,13 @@ class SPARTACH3ASSIGNMENT3_API ASpartaGameState : public AGameState
   protected:
 	virtual void BeginPlay() override;
 
-	// Life Cycles
-	void InitializeLevel();
+	// Stage
+	void InitializeStage();
 	void ClearStage();
+
+	// Wave
+	void StartWave();
+	void EndWave();
 
 	// Events
 	void OnTimeExpired();
