@@ -8,6 +8,10 @@
 
 #include "SpartaGameState.generated.h"
 
+class AItemSpawnVolume;
+class ASpikeTrapSpawnVolume;
+class AFallingObjectSpawnVolume;
+
 UCLASS()
 class SPARTACH3ASSIGNMENT3_API ASpartaGameState : public AGameState
 {
@@ -30,8 +34,14 @@ class SPARTACH3ASSIGNMENT3_API ASpartaGameState : public AGameState
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Wave|State")
 	int32 CollectedCoinCount;
 
-	UPROPERTY()
+	// World
+	TObjectPtr<AItemSpawnVolume> ItemSpawnVolume;
+	TObjectPtr<ASpikeTrapSpawnVolume> SpikeTrapSpawnVolume;
+	TObjectPtr<AFallingObjectSpawnVolume> FallingObjectSpawnVolume;
+
+	// Timer Handles
 	FTimerHandle WaveTimerHandle;
+	FTimerHandle FallingObjectTimerHandle;
 
   private:
 	TArray<TObjectPtr<AActor>> WaveActors;  // 현재 웨이브 동안 관리하는 액터
@@ -65,4 +75,8 @@ class SPARTACH3ASSIGNMENT3_API ASpartaGameState : public AGameState
 	void StartSpikeTrapSpawn();
 	UFUNCTION(BlueprintCallable)
 	void StartFallingObjectSpawn();
+
+	void SpawnFallingObjects();
+
+	void FindSpawnVolumes();  // 모든 SpawnVolume 찾기
 };

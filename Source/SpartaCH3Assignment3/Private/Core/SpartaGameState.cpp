@@ -5,7 +5,9 @@
 #include "Data/WaveDataRow.h"
 #include "Items/CoinItem.h"
 #include "Kismet/GameplayStatics.h"
+#include "World/FallingObjectSpawnVolume.h"
 #include "World/ItemSpawnVolume.h"
+#include "World/SpikeTrapSpawnVolume.h"
 
 ASpartaGameState::ASpartaGameState()
 {
@@ -31,6 +33,9 @@ void ASpartaGameState::BeginPlay()
 		UE_LOG(LogTemp, Error, TEXT("ASpartaGameState::BeginPlay() - SpartaGameInstance 로드 실패"));
 		return;
 	}
+
+	// 모든 SpawnVolume 찾기
+	FindSpawnVolumes();
 
 	// 게임 시작
 	InitializeStage();
@@ -107,6 +112,10 @@ void ASpartaGameState::EndWave()
 	}
 	WaveActors.Empty();
 
+	// 이전 웨이브 타이머 초기화
+	GetWorldTimerManager().ClearTimer(WaveTimerHandle);
+	GetWorldTimerManager().ClearTimer(FallingObjectTimerHandle);
+
 	// 다음 웨이브 설정
 	CurrentWaveIndex++;
 
@@ -165,30 +174,20 @@ void ASpartaGameState::NotifyPlayerDead()
 
 void ASpartaGameState::StartItemSpawn()
 {
-	// Wave 데이터 확인
-	const int32 SpawnItemCount = WaveData.ItemCount;
-	UDataTable *ItemDataTable = WaveData.ItemSpawnTable;
-
-	// SpawnVolume 찾기
-	TArray<AActor *> SpawnVolumes;
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AItemSpawnVolume::StaticClass(), SpawnVolumes);
-
-	if (SpawnVolumes.IsEmpty())
-	{
-		UE_LOG(LogTemp, Error, TEXT("AMyGameState::StartItemSpawn() - No SpawnVolume In Current Level"));
-		return;
-	}
-
-	AItemSpawnVolume *ItemSpawnVolume = Cast<AItemSpawnVolume>(SpawnVolumes[0]);
+	// ItemSpawnVolume이 할당되지 않은 경우
 	if (!ItemSpawnVolume)
 	{
-		UE_LOG(LogTemp, Error, TEXT("AMyGameState::StartItemSpawn() - No SpawnVolume In Current Level"));
+		UE_LOG(LogTemp, Error, TEXT("ASpartaGameState::StartItemSpawn() - ItemSpawnVolume is Invalid"));
 		return;
 	}
+
+	// Wave 데이터 확인
+	const int32 ItemSpawnCount = WaveData.ItemCount;
+	UDataTable *ItemDataTable = WaveData.ItemSpawnTable;
 
 	// 아이템 소환
 	ItemSpawnVolume->SetItemSpawnTable(ItemDataTable);
-	for (int i = 0; i < SpawnItemCount; i++)
+	for (int32 SpawnIndex = 0; SpawnIndex < ItemSpawnCount; SpawnIndex++)
 	{
 		AActor *SpawnedActor = ItemSpawnVolume->SpawnActor();
 		if (!SpawnedActor)
@@ -216,8 +215,91 @@ void ASpartaGameState::StartItemSpawn()
 
 void ASpartaGameState::StartSpikeTrapSpawn()
 {
+	// SpikeTrapSpawnVolume이 할당되지 않은 경우
+	if (!SpikeTrapSpawnVolume)
+	{
+		UE_LOG(LogTemp, Error, TEXT("ASpartaGameState::StartSpikeTrapSpawn() - SpikeTrapSpawnVolume is Invalid"));
+		return;
+	}
+
+	// 소환 개수
+	const int32 SpikeTrapSpawnCount = WaveData.SpikeTrapCount;
+
+	for (int32 SpawnIndex = 0; SpawnIndex < SpikeTrapSpawnCount; SpawnIndex++)
+	{
+		AActor *SpawnedActor = SpikeTrapSpawnVolume->SpawnActor();
+		if (!SpawnedActor)
+		{
+			continue;
+		}
+
+		WaveActors.Add(SpawnedActor);
+	}
 }
 
 void ASpartaGameState::StartFallingObjectSpawn()
 {
+	// FallingObjectSpawnVolume이 할당되지 않은 경우
+	if (!FallingObjectSpawnVolume)
+	{
+		UE_LOG(LogTemp, Error, TEXT("ASpartaGameState::StartFallingObjectSpawn() - FallingObjectSpawnVolume is Invalid"));
+		return;
+	}
+
+	// 소환 개수
+	const int32 FallingObstacleSpawnInterval = WaveData.FallingObstacleSpawnInterval;
+
+	GetWorldTimerManager().SetTimer(
+		FallingObjectTimerHandle,
+		this,
+		&ASpartaGameState::SpawnFallingObjects,
+		FallingObstacleSpawnInterval,
+		true);
+}
+
+void ASpartaGameState::SpawnFallingObjects()
+{
+	// 소환 개수
+	const int32 FallingObstacleSpawnCount = WaveData.FallingObstacleCount;
+
+	// 액터 소환
+	for (int32 SpawnIndex = 0; SpawnIndex < FallingObstacleSpawnCount; SpawnIndex++)
+	{
+		AActor *SpawnedActor = FallingObjectSpawnVolume->SpawnActor();
+		if (!SpawnedActor)
+		{
+			continue;
+		}
+
+		WaveActors.Add(SpawnedActor);
+	}
+}
+
+void ASpartaGameState::FindSpawnVolumes()
+{
+	TArray<AActor *> SpawnVolumes;
+
+	// ItemSpawnVolume 찾기
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AItemSpawnVolume::StaticClass(), SpawnVolumes);
+
+	if (!SpawnVolumes.IsEmpty())
+	{
+		ItemSpawnVolume = Cast<AItemSpawnVolume>(SpawnVolumes[0]);
+	}
+
+	// SpikeTrapSpawnVolume 찾기
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ASpikeTrapSpawnVolume::StaticClass(), SpawnVolumes);
+
+	if (!SpawnVolumes.IsEmpty())
+	{
+		SpikeTrapSpawnVolume = Cast<ASpikeTrapSpawnVolume>(SpawnVolumes[0]);
+	}
+
+	// FallingObjectSpawnVolume 찾기
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AFallingObjectSpawnVolume::StaticClass(), SpawnVolumes);
+
+	if (!SpawnVolumes.IsEmpty())
+	{
+		FallingObjectSpawnVolume = Cast<AFallingObjectSpawnVolume>(SpawnVolumes[0]);
+	}
 }
