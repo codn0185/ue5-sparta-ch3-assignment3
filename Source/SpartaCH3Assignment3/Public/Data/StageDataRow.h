@@ -15,9 +15,5 @@ struct FStageDataRow : public FTableRowBase
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSoftObjectPtr<UWorld> Level;  // 스테이지 맵
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float TimeLimit;  // 제한 시간
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int32 ItemCount;  // 아이템 개수
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TObjectPtr<UDataTable> ItemSpawnTable;  // 아이템 소환 테이블
+	TObjectPtr<UDataTable> WaveDataTable;  // 웨이브 테이블
 };
