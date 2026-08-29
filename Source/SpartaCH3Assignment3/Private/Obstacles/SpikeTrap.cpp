@@ -169,5 +169,12 @@ FName ASpikeTrap::GetType() const
 
 FVector ASpikeTrap::GetSize() const
 {
-	return PlatformMesh->Bounds.BoxExtent * 2.f;
+	if (!PlatformMesh || !PlatformMesh->GetStaticMesh())
+	{
+		return FVector::ZeroVector;
+	}
+
+	const FVector MeshSize = PlatformMesh->GetStaticMesh()->GetBounds().BoxExtent * 2.f;
+
+	return MeshSize * PlatformMesh->GetRelativeScale3D();
 }
