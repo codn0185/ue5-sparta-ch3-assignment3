@@ -37,6 +37,21 @@ void USpartaGameInstance::StartGame()
 	StartStage();
 }
 
+void USpartaGameInstance::ExitGame()
+{
+	if (UWorld* World = GetWorld())
+	{
+		if (APlayerController* PlayerController = World->GetFirstPlayerController())
+		{
+			UKismetSystemLibrary::QuitGame(
+				World,
+				PlayerController,
+				EQuitPreference::Quit,
+				false);
+		}
+	}
+}
+
 void USpartaGameInstance::StartStage()
 {
 	UE_LOG(LogTemp, Warning, TEXT("USpartaGameInstance::StartStage()"));
