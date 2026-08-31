@@ -35,31 +35,15 @@ void ASpartaGameState::BeginPlay()
 		return;
 	}
 
-	// EGameState 확인
+	// EGameState::Playing인 경우
 	EGameState GameState = GetGameInstance<USpartaGameInstance>()->GetCurrentGameState();
-	if (ASpartaPlayerController *PlayerController = GetWorld()->GetFirstPlayerController<ASpartaPlayerController>())
+	if (GameState == EGameState::Playing)
 	{
-		switch (GameState)
-		{
-			case EGameState::MainMenu:
-				// UI
-				PlayerController->HideAllUI();
-				PlayerController->ShowMainMenu();
+		// 모든 SpawnVolume 찾기
+		FindSpawnVolumes();
 
-				break;
-			case EGameState::Playing:
-				// UI
-				PlayerController->HideAllUI();
-				PlayerController->ShowGameHUD();
-
-				// 모든 SpawnVolume 찾기
-				FindSpawnVolumes();
-
-				// 게임 시작
-				InitializeStage();
-
-				break;
-		}
+		// 게임 시작
+		InitializeStage();
 	}
 }
 
