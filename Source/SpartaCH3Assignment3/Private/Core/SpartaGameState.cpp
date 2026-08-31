@@ -84,30 +84,6 @@ void ASpartaGameState::StartWave()
 {
 	UE_LOG(LogTemp, Warning, TEXT("ASpartaGameState::StartWave() - Wave %d"), CurrentWaveIndex + 1);
 
-	// GameHUD 업데이트
-	if (ASpartaPlayerController *PlayerController = GetWorld()->GetFirstPlayerController<ASpartaPlayerController>())
-	{
-		// 웨이브
-		PlayerController->UpdateGameHUDWave(CurrentWaveIndex + 1, StageData.WaveDataTable->GetRowMap().Num());
-
-		// 시간
-		TWeakObjectPtr<ASpartaGameState> WeakThis(this);
-		TWeakObjectPtr<ASpartaPlayerController> WeakPlayerController(PlayerController);
-
-		GetWorldTimerManager().SetTimer(
-			UpdateGameHUDTimeTimerHandle,
-			[WeakThis, WeakPlayerController]()
-			{
-				if (WeakThis.IsValid() && WeakPlayerController.IsValid())
-				{
-					const float RemainingTime = WeakThis->GetWorldTimerManager().GetTimerRemaining(WeakThis->WaveTimerHandle);
-					WeakPlayerController->UpdateGameHUDTime(RemainingTime);
-				}
-			},
-			0.1f,
-			true);
-	}
-
 	// Wave 정보 초기화
 	const UDataTable *WaveDataTable = StageData.WaveDataTable;
 	const TArray<FName> RowNames = WaveDataTable->GetRowNames();
@@ -133,6 +109,31 @@ void ASpartaGameState::StartWave()
 		&ASpartaGameState::OnTimeExpired,
 		WaveTime,
 		false);
+
+	// GameHUD 업데이트
+	if (ASpartaPlayerController *PlayerController = GetWorld()->GetFirstPlayerController<ASpartaPlayerController>())
+	{
+		// 웨이브
+		PlayerController->UpdateGameHUDWave(CurrentWaveIndex + 1, StageData.WaveDataTable->GetRowMap().Num());
+
+		// 시간
+		TWeakObjectPtr<ASpartaGameState> WeakThis(this);
+		TWeakObjectPtr<ASpartaPlayerController> WeakPlayerController(PlayerController);
+
+		GetWorldTimerManager().SetTimer(
+			UpdateGameHUDTimeTimerHandle,
+			[WeakThis, WeakPlayerController]()
+			{
+				if (WeakThis.IsValid() && WeakPlayerController.IsValid())
+				{
+					const float RemainingTime = WeakThis->GetWorldTimerManager().GetTimerRemaining(WeakThis->WaveTimerHandle);
+					const float TotalTime = WeakThis->WaveData.WaveTime;
+					WeakPlayerController->UpdateGameHUDTime(RemainingTime, TotalTime);
+				}
+			},
+			0.1f,
+			true);
+	}
 }
 
 void ASpartaGameState::EndWave()
