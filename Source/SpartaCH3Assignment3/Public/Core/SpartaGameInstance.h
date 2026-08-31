@@ -8,7 +8,7 @@
 
 struct FStageDataRow;
 
-UENUM()
+UENUM(BlueprintType)
 enum class EGameState
 {
 	MainMenu,
