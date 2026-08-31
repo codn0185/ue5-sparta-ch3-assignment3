@@ -42,6 +42,7 @@ class SPARTACH3ASSIGNMENT3_API ASpartaGameState : public AGameState
 	// Timer Handles
 	FTimerHandle WaveTimerHandle;
 	FTimerHandle FallingObjectTimerHandle;
+	FTimerHandle UpdateGameHUDTimeTimerHandle;
 
   private:
 	TArray<TObjectPtr<AActor>> WaveActors;  // 현재 웨이브 동안 관리하는 액터

@@ -89,6 +89,23 @@ void ASpartaGameState::StartWave()
 	{
 		// 웨이브
 		PlayerController->UpdateGameHUDWave(CurrentWaveIndex + 1, StageData.WaveDataTable->GetRowMap().Num());
+
+		// 시간
+		TWeakObjectPtr<ASpartaGameState> WeakThis(this);
+		TWeakObjectPtr<ASpartaPlayerController> WeakPlayerController(PlayerController);
+
+		GetWorldTimerManager().SetTimer(
+			UpdateGameHUDTimeTimerHandle,
+			[WeakThis, WeakPlayerController]()
+			{
+				if (WeakThis.IsValid() && WeakPlayerController.IsValid())
+				{
+					const float RemainingTime = WeakThis->GetWorldTimerManager().GetTimerRemaining(WeakThis->WaveTimerHandle);
+					WeakPlayerController->UpdateGameHUDTime(RemainingTime);
+				}
+			},
+			0.1f,
+			true);
 	}
 
 	// Wave 정보 초기화
@@ -135,6 +152,7 @@ void ASpartaGameState::EndWave()
 	// 이전 웨이브 타이머 초기화
 	GetWorldTimerManager().ClearTimer(WaveTimerHandle);
 	GetWorldTimerManager().ClearTimer(FallingObjectTimerHandle);
+	GetWorldTimerManager().ClearTimer(UpdateGameHUDTimeTimerHandle);
 
 	// 다음 웨이브 설정
 	CurrentWaveIndex++;
