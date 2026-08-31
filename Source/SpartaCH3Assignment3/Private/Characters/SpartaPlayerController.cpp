@@ -7,6 +7,8 @@
 #include "Components/ProgressBar.h"
 #include "Components/TextBlock.h"
 #include "Core/SpartaGameInstance.h"
+#include "GameFramework/Character.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 ASpartaPlayerController::ASpartaPlayerController()
 	:  // IMC & IA
@@ -72,6 +74,21 @@ void ASpartaPlayerController::HideAllUI()
 	SetInputMode(FInputModeGameOnly());
 }
 
+void ASpartaPlayerController::EnableUIInputMode()
+{
+	bShowMouseCursor = true;
+	SetInputMode(FInputModeUIOnly());
+
+	if (ACharacter* PlayerCharacter = GetCharacter())
+	{
+		PlayerCharacter->ConsumeMovementInputVector();
+		if (UCharacterMovementComponent* MovementComponent = PlayerCharacter->GetCharacterMovement())
+		{
+			MovementComponent->StopMovementImmediately();
+		}
+	}
+}
+
 void ASpartaPlayerController::ShowMainMenu()
 {
 	UE_LOG(LogTemp, Warning, TEXT("ASpartaPlayerController::ShowMainMenu()"));
@@ -114,8 +131,7 @@ void ASpartaPlayerController::ShowMainMenu()
 	{
 		MainMenuWidget->AddToViewport();
 
-		bShowMouseCursor = true;
-		SetInputMode(FInputModeUIOnly());
+		EnableUIInputMode();
 	}
 }
 
@@ -171,8 +187,7 @@ void ASpartaPlayerController::ShowGameOver()
 	{
 		GameOverWidget->AddToViewport();
 
-		bShowMouseCursor = true;
-		SetInputMode(FInputModeUIOnly());
+		EnableUIInputMode();
 	}
 }
 
@@ -228,8 +243,7 @@ void ASpartaPlayerController::ShowGameClear()
 	{
 		GameClearWidget->AddToViewport();
 
-		bShowMouseCursor = true;
-		SetInputMode(FInputModeUIOnly());
+		EnableUIInputMode();
 	}
 }
 
@@ -270,6 +284,7 @@ void ASpartaPlayerController::ShowGameHUD()
 	// Viewport에 추가
 	GameHUDWidget->AddToViewport();
 
+	// 입력 모드 - Game
 	bShowMouseCursor = false;
 	SetInputMode(FInputModeGameOnly());
 }

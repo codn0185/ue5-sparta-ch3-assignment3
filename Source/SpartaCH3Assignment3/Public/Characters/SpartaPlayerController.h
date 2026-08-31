@@ -106,6 +106,8 @@ class SPARTACH3ASSIGNMENT3_API ASpartaPlayerController : public APlayerControlle
 	// UI
 	UFUNCTION(BlueprintCallable, Category = "UI")
 	void HideAllUI();
+	UFUNCTION(BlueprintCallable, Category = "UI")
+	void EnableUIInputMode();
 
 	// UI - MainMenu
 	UFUNCTION(BlueprintCallable, Category = "UI|MainMenu")
