@@ -15,6 +15,8 @@ USpartaGameInstance::USpartaGameInstance()
 
 void USpartaGameInstance::Init()
 {
+	Super::Init();
+
 	StartMainMenu();
 }
 
