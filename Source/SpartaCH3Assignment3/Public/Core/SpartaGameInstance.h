@@ -25,6 +25,8 @@ class SPARTACH3ASSIGNMENT3_API USpartaGameInstance : public UGameInstance
   protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Game|State")
 	EGameState CurrentGameState;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Game|Map")
+	TSoftObjectPtr<UWorld> MainMenuLevel;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Game|Data")
 	TObjectPtr<UDataTable> StageDataTable;
@@ -35,6 +37,9 @@ class SPARTACH3ASSIGNMENT3_API USpartaGameInstance : public UGameInstance
 
   public:
 	USpartaGameInstance();
+
+	UFUNCTION(BlueprintCallable, Category = "Game|Flows")
+	void StartMainMenu();
 
 	UFUNCTION(BlueprintCallable, Category = "Game|Flows")
 	void StartGame();

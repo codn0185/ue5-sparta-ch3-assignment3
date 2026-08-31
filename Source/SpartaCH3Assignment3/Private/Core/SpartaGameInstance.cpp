@@ -5,10 +5,21 @@
 
 USpartaGameInstance::USpartaGameInstance()
 	: CurrentGameState(EGameState::MainMenu),
+	  MainMenuLevel(nullptr),
 	  StageDataTable(nullptr),
 	  CurrentStageIndex(0),
 	  TotalScore(0)
 {
+}
+
+void USpartaGameInstance::StartMainMenu()
+{
+	CurrentGameState = EGameState::MainMenu;
+
+	if (!MainMenuLevel.IsNull())
+	{
+		UGameplayStatics::OpenLevelBySoftObjectPtr(this, MainMenuLevel);
+	}
 }
 
 void USpartaGameInstance::StartGame()
