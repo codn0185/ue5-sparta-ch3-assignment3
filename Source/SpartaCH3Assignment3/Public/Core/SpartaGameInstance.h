@@ -57,6 +57,7 @@ class SPARTACH3ASSIGNMENT3_API USpartaGameInstance : public UGameInstance
 
 	void AddScore(int32 Score);
 
+	EGameState GetCurrentGameState() const;
 	const FStageDataRow* GetCurrentStageData() const;
 	int32 GetCurrentStageIndex() const;
 	int32 GetMaxStageIndex() const;

@@ -127,6 +127,11 @@ void USpartaGameInstance::AddScore(int32 Score)
 	TotalScore += Score;
 }
 
+EGameState USpartaGameInstance::GetCurrentGameState() const
+{
+	return CurrentGameState;
+}
+
 const FStageDataRow* USpartaGameInstance::GetCurrentStageData() const
 {
 	if (!StageDataTable)
