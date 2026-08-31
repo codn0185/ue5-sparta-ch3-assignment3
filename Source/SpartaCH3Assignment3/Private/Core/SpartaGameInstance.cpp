@@ -1,5 +1,6 @@
 #include "Core/SpartaGameInstance.h"
 
+#include "Characters/SpartaPlayerController.h"
 #include "Data/StageDataRow.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -19,6 +20,13 @@ void USpartaGameInstance::StartMainMenu()
 	if (!MainMenuLevel.IsNull())
 	{
 		UGameplayStatics::OpenLevelBySoftObjectPtr(this, MainMenuLevel);
+
+		// Show MainMenu
+		if (ASpartaPlayerController* PlayerController = GetWorld()->GetFirstPlayerController<ASpartaPlayerController>())
+		{
+			PlayerController->HideAllUI();
+			PlayerController->ShowMainMenu();
+		}
 	}
 }
 
@@ -30,6 +38,13 @@ void USpartaGameInstance::StartGame()
 
 	CurrentStageIndex = 0;
 	TotalScore = 0;
+
+	// Show GameHUD
+	if (ASpartaPlayerController* PlayerController = GetWorld()->GetFirstPlayerController<ASpartaPlayerController>())
+	{
+		PlayerController->HideAllUI();
+		PlayerController->ShowGameHUD();
+	}
 
 	StartStage();
 }
@@ -72,6 +87,13 @@ void USpartaGameInstance::OnGameOver()
 	UE_LOG(LogTemp, Warning, TEXT("USpartaGameInstance::OnGameOver()"));
 
 	CurrentGameState = EGameState::GameOver;
+
+	// Show GameOver
+	if (ASpartaPlayerController* PlayerController = GetWorld()->GetFirstPlayerController<ASpartaPlayerController>())
+	{
+		PlayerController->HideAllUI();
+		PlayerController->ShowGameOver();
+	}
 }
 
 void USpartaGameInstance::OnGameClear()
@@ -80,6 +102,13 @@ void USpartaGameInstance::OnGameClear()
 	UE_LOG(LogTemp, Warning, TEXT("USpartaGameInstance::OnGameClear()"));
 
 	CurrentGameState = EGameState::GameClear;
+
+	// Show GameClear
+	if (ASpartaPlayerController* PlayerController = GetWorld()->GetFirstPlayerController<ASpartaPlayerController>())
+	{
+		PlayerController->HideAllUI();
+		PlayerController->ShowGameClear();
+	}
 }
 
 void USpartaGameInstance::AddScore(int32 Score)
