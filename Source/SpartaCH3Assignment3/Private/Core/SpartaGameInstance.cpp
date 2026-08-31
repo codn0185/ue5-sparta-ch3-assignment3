@@ -13,15 +13,6 @@ USpartaGameInstance::USpartaGameInstance()
 {
 }
 
-void USpartaGameInstance::Init()
-{
-	Super::Init();
-
-	UE_LOG(LogTemp, Warning, TEXT("USpartaGameInstance::Init()"));
-
-	StartMainMenu();
-}
-
 void USpartaGameInstance::StartMainMenu()
 {
 	UE_LOG(LogTemp, Warning, TEXT("USpartaGameInstance::StartMainMenu()"));
