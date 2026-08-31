@@ -1,5 +1,6 @@
 #include "Core/SpartaGameState.h"
 
+#include "Characters/SpartaPlayerController.h"
 #include "Core/SpartaGameInstance.h"
 #include "Data/StageDataRow.h"
 #include "Data/WaveDataRow.h"
@@ -52,6 +53,18 @@ void ASpartaGameState::InitializeStage()
 	// Stage 정보 초기화
 	CurrentWaveIndex = 0;
 
+	// GameHUD 업데이트
+	if (ASpartaPlayerController *PlayerController = GetWorld()->GetFirstPlayerController<ASpartaPlayerController>())
+	{
+		// 스테이지
+		if (USpartaGameInstance *GameInstance = GetGameInstance<USpartaGameInstance>())
+		{
+			const FStageDataRow *CurrentStageData = GameInstance->GetCurrentStageData();
+			const int32 CurrentStageIndex = GameInstance->GetCurrentStageIndex();
+			PlayerController->UpdateGameHUDStage(CurrentStageData->StageName, CurrentStageIndex + 1);
+		}
+	}
+
 	// 웨이브 시작
 	StartWave();
 }
@@ -70,6 +83,13 @@ void ASpartaGameState::ClearStage()
 void ASpartaGameState::StartWave()
 {
 	UE_LOG(LogTemp, Warning, TEXT("ASpartaGameState::StartWave() - Wave %d"), CurrentWaveIndex + 1);
+
+	// GameHUD 업데이트
+	if (ASpartaPlayerController *PlayerController = GetWorld()->GetFirstPlayerController<ASpartaPlayerController>())
+	{
+		// 웨이브
+		PlayerController->UpdateGameHUDWave(CurrentWaveIndex + 1, StageData.WaveDataTable->GetRowMap().Num());
+	}
 
 	// Wave 정보 초기화
 	const UDataTable *WaveDataTable = StageData.WaveDataTable;
@@ -142,12 +162,23 @@ void ASpartaGameState::NotifyCoinCollected(int32 Score)
 	CollectedCoinCount++;
 	StageScore += Score;
 
-	// GameInstance의 전역 점수에 추가
-	if (UGameInstance *GameInstance = GetGameInstance())
+	// GameHUD 업데이트
+	if (ASpartaPlayerController *PlayerController = GetWorld()->GetFirstPlayerController<ASpartaPlayerController>())
 	{
-		if (USpartaGameInstance *SpartaGameInstance = Cast<USpartaGameInstance>(GameInstance))
+		// 코인
+		PlayerController->UpdateGameHUDCoin(CollectedCoinCount, SpawnedCoinCount);
+	}
+
+	// GameInstance의 전역 점수에 추가
+	if (USpartaGameInstance *GameInstance = GetGameInstance<USpartaGameInstance>())
+	{
+		GameInstance->AddScore(Score);
+
+		// GameHUD 업데이트
+		if (ASpartaPlayerController *PlayerController = GetWorld()->GetFirstPlayerController<ASpartaPlayerController>())
 		{
-			SpartaGameInstance->AddScore(Score);
+			// 점수
+			PlayerController->UpdateGameHUDScore(GameInstance->GetTotalScore());
 		}
 	}
 
@@ -200,6 +231,13 @@ void ASpartaGameState::StartItemSpawn()
 		}
 
 		WaveActors.Add(SpawnedActor);
+	}
+
+	// GameHUD 업데이트
+	if (ASpartaPlayerController *PlayerController = GetWorld()->GetFirstPlayerController<ASpartaPlayerController>())
+	{
+		// 코인
+		PlayerController->UpdateGameHUDCoin(CollectedCoinCount, SpawnedCoinCount);
 	}
 
 	// TODO: 코인 아이템 최소 보장 (1개 이상 필수)
