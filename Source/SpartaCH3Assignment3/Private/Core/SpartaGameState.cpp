@@ -61,12 +61,15 @@ void ASpartaGameState::InitializeStage()
 	// GameHUD 업데이트
 	if (ASpartaPlayerController *PlayerController = GetWorld()->GetFirstPlayerController<ASpartaPlayerController>())
 	{
-		// 스테이지
 		if (USpartaGameInstance *GameInstance = GetGameInstance<USpartaGameInstance>())
 		{
+			// 스테이지
 			const FStageDataRow *CurrentStageData = GameInstance->GetCurrentStageData();
 			const int32 CurrentStageIndex = GameInstance->GetCurrentStageIndex();
 			PlayerController->UpdateGameHUDStage(CurrentStageData->StageName, CurrentStageIndex + 1);
+
+			// 점수
+			PlayerController->UpdateGameHUDScore(GameInstance->GetTotalScore());
 		}
 	}
 
