@@ -54,6 +54,12 @@ ASpartaCharacter::ASpartaCharacter()
 void ASpartaCharacter::AddHealth(int32 Amount)
 {
 	Health = FMath::Clamp(Health + Amount, 0, MaxHealth);
+
+	// GameHUD 업데이트
+	if (ASpartaPlayerController* PlayerController = GetOwner<ASpartaPlayerController>())
+	{
+		PlayerController->UpdateGameHUDHealth(Health, MaxHealth);
+	}
 }
 
 bool ASpartaCharacter::IsDead() const
@@ -253,6 +259,13 @@ float ASpartaCharacter::TakeDamage(float DamageAmount, FDamageEvent const& Damag
 	float ActualDamage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
 	Health = FMath::Clamp(Health - ActualDamage, 0, MaxHealth);
+
+	// GameHUD 업데이트
+	if (ASpartaPlayerController* PlayerController = GetOwner<ASpartaPlayerController>())
+	{
+		PlayerController->UpdateGameHUDHealth(Health, MaxHealth);
+	}
+
 	if (Health <= 0)
 	{
 		OnDeath();
