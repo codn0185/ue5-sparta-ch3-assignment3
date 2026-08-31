@@ -112,6 +112,13 @@ void ASpartaCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
+	// GameHUD 업데이트
+	if (ASpartaPlayerController* PlayerController = GetOwner<ASpartaPlayerController>())
+	{
+		// 체력
+		PlayerController->UpdateGameHUDHealth(Health, MaxHealth);
+	}
+
 	// 속도 설정
 	UpdateSpeed();
 }

@@ -35,9 +35,6 @@ class SPARTACH3ASSIGNMENT3_API ASpartaCharacter : public ACharacter
 {
 	GENERATED_BODY()
 
-  public:
-	ASpartaCharacter();
-
   protected:
 	// Components
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components|Camera")
@@ -69,6 +66,8 @@ class SPARTACH3ASSIGNMENT3_API ASpartaCharacter : public ACharacter
 	FTimerHandle ReverseControlTimerHandle;
 
   public:
+	ASpartaCharacter();
+
 	// Properties
 	UFUNCTION(BlueprintCallable, Category = "Properties|Health")
 	void AddHealth(int32 Amount);  // 체력 회복
