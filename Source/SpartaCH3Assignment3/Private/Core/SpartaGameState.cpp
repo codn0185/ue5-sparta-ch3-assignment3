@@ -35,11 +35,32 @@ void ASpartaGameState::BeginPlay()
 		return;
 	}
 
-	// 모든 SpawnVolume 찾기
-	FindSpawnVolumes();
+	// EGameState 확인
+	EGameState GameState = GetGameInstance<USpartaGameInstance>()->GetCurrentGameState();
+	if (ASpartaPlayerController *PlayerController = GetWorld()->GetFirstPlayerController<ASpartaPlayerController>())
+	{
+		switch (GameState)
+		{
+			case EGameState::MainMenu:
+				// UI
+				PlayerController->HideAllUI();
+				PlayerController->ShowMainMenu();
 
-	// 게임 시작
-	InitializeStage();
+				break;
+			case EGameState::Playing:
+				// UI
+				PlayerController->HideAllUI();
+				PlayerController->ShowGameHUD();
+
+				// 모든 SpawnVolume 찾기
+				FindSpawnVolumes();
+
+				// 게임 시작
+				InitializeStage();
+
+				break;
+		}
+	}
 }
 
 void ASpartaGameState::InitializeStage()

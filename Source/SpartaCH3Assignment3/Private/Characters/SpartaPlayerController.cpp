@@ -5,6 +5,7 @@
 #include "Blueprint/UserWidget.h"
 #include "Components/ProgressBar.h"
 #include "Components/TextBlock.h"
+#include "Core/SpartaGameInstance.h"
 
 ASpartaPlayerController::ASpartaPlayerController()
 	:  // IMC & IA
@@ -29,6 +30,7 @@ void ASpartaPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 
+	// InputMappingContext 연결
 	if (ULocalPlayer* LocalPlayer = GetLocalPlayer())
 	{
 		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = LocalPlayer->GetSubsystem<UEnhancedInputLocalPlayerSubsystem>())
@@ -37,6 +39,23 @@ void ASpartaPlayerController::BeginPlay()
 			{
 				Subsystem->AddMappingContext(CharacterInputMappingContext, 0);
 			}
+		}
+	}
+
+	// EGameState 확인
+	if (USpartaGameInstance* GameInstance = GetGameInstance<USpartaGameInstance>())
+	{
+		EGameState GameState = GameInstance->GetCurrentGameState();
+		switch (GameState)
+		{
+			case EGameState::MainMenu:
+				HideAllUI();
+				ShowMainMenu();
+				break;
+			case EGameState::Playing:
+				HideAllUI();
+				ShowGameHUD();
+				break;
 		}
 	}
 }
@@ -54,6 +73,8 @@ void ASpartaPlayerController::HideAllUI()
 
 void ASpartaPlayerController::ShowMainMenu()
 {
+	UE_LOG(LogTemp, Warning, TEXT("ASpartaPlayerController::ShowMainMenu()"));
+
 	// MainMenuWidget 생성
 	if (!MainMenuWidget)
 	{
@@ -83,6 +104,8 @@ void ASpartaPlayerController::HideMainMenu()
 
 void ASpartaPlayerController::ShowGameOver()
 {
+	UE_LOG(LogTemp, Warning, TEXT("ASpartaPlayerController::ShowGameOver()"));
+
 	// GameOverWidget 생성
 	if (!GameOverWidget)
 	{
@@ -112,6 +135,8 @@ void ASpartaPlayerController::HideGameOver()
 
 void ASpartaPlayerController::ShowGameClear()
 {
+	UE_LOG(LogTemp, Warning, TEXT("ASpartaPlayerController::ShowGameClear()"));
+
 	// GameClearWidget 생성
 	if (!GameClearWidget)
 	{
@@ -141,6 +166,8 @@ void ASpartaPlayerController::HideGameClear()
 
 void ASpartaPlayerController::ShowGameHUD()
 {
+	UE_LOG(LogTemp, Warning, TEXT("ASpartaPlayerController::ShowGameHUD()"));
+
 	// GameHUDWidget 생성
 	if (!GameHUDWidget)
 	{

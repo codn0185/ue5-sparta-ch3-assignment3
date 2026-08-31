@@ -31,13 +31,6 @@ void USpartaGameInstance::StartMainMenu()
 	if (!MainMenuLevel.IsNull())
 	{
 		UGameplayStatics::OpenLevelBySoftObjectPtr(this, MainMenuLevel);
-
-		// Show MainMenu
-		if (ASpartaPlayerController* PlayerController = GetWorld()->GetFirstPlayerController<ASpartaPlayerController>())
-		{
-			PlayerController->HideAllUI();
-			PlayerController->ShowMainMenu();
-		}
 	}
 }
 
@@ -49,13 +42,6 @@ void USpartaGameInstance::StartGame()
 
 	CurrentStageIndex = 0;
 	TotalScore = 0;
-
-	// Show GameHUD
-	if (ASpartaPlayerController* PlayerController = GetWorld()->GetFirstPlayerController<ASpartaPlayerController>())
-	{
-		PlayerController->HideAllUI();
-		PlayerController->ShowGameHUD();
-	}
 
 	StartStage();
 }
