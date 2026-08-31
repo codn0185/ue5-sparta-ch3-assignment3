@@ -328,12 +328,6 @@ void ASpartaGameState::SpawnFallingObjects()
 	for (int32 SpawnIndex = 0; SpawnIndex < FallingObstacleSpawnCount; SpawnIndex++)
 	{
 		AActor *SpawnedActor = FallingObjectSpawnVolume->SpawnActor();
-		if (!SpawnedActor)
-		{
-			continue;
-		}
-
-		WaveActors.Add(SpawnedActor);
 	}
 }
 
