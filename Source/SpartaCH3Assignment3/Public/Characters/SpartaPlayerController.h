@@ -127,6 +127,8 @@ class SPARTACH3ASSIGNMENT3_API ASpartaPlayerController : public APlayerControlle
 
 	// UI - GameHUD
 	UFUNCTION(BlueprintCallable, Category = "UI|GameHUD")
+	bool InitializeGameHUD();
+	UFUNCTION(BlueprintCallable, Category = "UI|GameHUD")
 	void ShowGameHUD();
 	UFUNCTION(BlueprintCallable, Category = "UI|GameHUD")
 	void HideGameHUD();

@@ -241,27 +241,37 @@ void ASpartaPlayerController::HideGameClear()
 	}
 }
 
+bool ASpartaPlayerController::InitializeGameHUD()
+{
+	if (GameHUDWidget)
+	{
+		return true;
+	}
+
+	if (!GameHUDWidgetClass)
+	{
+		return false;
+	}
+
+	GameHUDWidget = CreateWidget<UUserWidget>(this, GameHUDWidgetClass);
+	return GameHUDWidget != nullptr;
+}
+
 void ASpartaPlayerController::ShowGameHUD()
 {
 	UE_LOG(LogTemp, Warning, TEXT("ASpartaPlayerController::ShowGameHUD()"));
 
 	// GameHUDWidget 생성
-	if (!GameHUDWidget)
+	if (!InitializeGameHUD())
 	{
-		if (GameHUDWidgetClass)
-		{
-			GameHUDWidget = CreateWidget<UUserWidget>(this, GameHUDWidgetClass);
-		}
+		return;
 	}
 
 	// Viewport에 추가
-	if (GameHUDWidget)
-	{
-		GameHUDWidget->AddToViewport();
+	GameHUDWidget->AddToViewport();
 
-		bShowMouseCursor = false;
-		SetInputMode(FInputModeGameOnly());
-	}
+	bShowMouseCursor = false;
+	SetInputMode(FInputModeGameOnly());
 }
 
 void ASpartaPlayerController::HideGameHUD()
@@ -274,7 +284,7 @@ void ASpartaPlayerController::HideGameHUD()
 
 void ASpartaPlayerController::UpdateGameHUDStage(FName StageName, int32 StageNumber)
 {
-	if (!GameHUDWidget)
+	if (!InitializeGameHUD())
 	{
 		return;
 	}
@@ -291,7 +301,7 @@ void ASpartaPlayerController::UpdateGameHUDStage(FName StageName, int32 StageNum
 
 void ASpartaPlayerController::UpdateGameHUDWave(int32 WaveNumber, int32 MaxWaveNumber)
 {
-	if (!GameHUDWidget)
+	if (!InitializeGameHUD())
 	{
 		return;
 	}
@@ -308,7 +318,7 @@ void ASpartaPlayerController::UpdateGameHUDWave(int32 WaveNumber, int32 MaxWaveN
 
 void ASpartaPlayerController::UpdateGameHUDTime(float RemainingTime, float TotalTime)
 {
-	if (!GameHUDWidget)
+	if (!InitializeGameHUD())
 	{
 		return;
 	}
@@ -328,7 +338,7 @@ void ASpartaPlayerController::UpdateGameHUDTime(float RemainingTime, float Total
 
 void ASpartaPlayerController::UpdateGameHUDScore(int32 Score)
 {
-	if (!GameHUDWidget)
+	if (!InitializeGameHUD())
 	{
 		return;
 	}
@@ -341,7 +351,7 @@ void ASpartaPlayerController::UpdateGameHUDScore(int32 Score)
 
 void ASpartaPlayerController::UpdateGameHUDCoin(int32 CollectedCoinCount, int32 TotalCoinCount)
 {
-	if (!GameHUDWidget)
+	if (!InitializeGameHUD())
 	{
 		return;
 	}
@@ -358,7 +368,7 @@ void ASpartaPlayerController::UpdateGameHUDCoin(int32 CollectedCoinCount, int32 
 
 void ASpartaPlayerController::UpdateGameHUDHealth(int32 Health, int32 MaxHealth)
 {
-	if (!GameHUDWidget)
+	if (!InitializeGameHUD())
 	{
 		return;
 	}
@@ -382,7 +392,7 @@ void ASpartaPlayerController::UpdateGameHUDHealth(int32 Health, int32 MaxHealth)
 
 void ASpartaPlayerController::UpdateGameHUDEffect()
 {
-	if (!GameHUDWidget)
+	if (!InitializeGameHUD())
 	{
 		return;
 	}
