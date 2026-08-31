@@ -91,6 +91,10 @@ class SPARTACH3ASSIGNMENT3_API ASpartaPlayerController : public APlayerControlle
 	virtual void BeginPlay() override;
 
   public:
+	  // UI
+	UFUNCTION(BlueprintCallable, Category = "UI")
+	void HideAllUI();
+
 	// UI - MainMenu
 	UFUNCTION(BlueprintCallable, Category = "UI|MainMenu")
 	void ShowMainMenu();

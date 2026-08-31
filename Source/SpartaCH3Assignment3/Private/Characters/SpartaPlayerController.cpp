@@ -41,6 +41,17 @@ void ASpartaPlayerController::BeginPlay()
 	}
 }
 
+void ASpartaPlayerController::HideAllUI()
+{
+	HideMainMenu();
+	HideGameOver();
+	HideGameClear();
+	HideGameHUD();
+
+	bShowMouseCursor = false;
+	SetInputMode(FInputModeGameOnly());
+}
+
 void ASpartaPlayerController::ShowMainMenu()
 {
 	// MainMenuWidget 생성
