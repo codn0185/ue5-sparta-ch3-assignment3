@@ -3,6 +3,7 @@
 #include "EnhancedInputSubsystems.h"
 
 #include "Blueprint/UserWidget.h"
+#include "Components/Button.h"
 #include "Components/ProgressBar.h"
 #include "Components/TextBlock.h"
 #include "Core/SpartaGameInstance.h"
@@ -81,6 +82,30 @@ void ASpartaPlayerController::ShowMainMenu()
 		if (MainMenuWidgetClass)
 		{
 			MainMenuWidget = CreateWidget<UUserWidget>(this, MainMenuWidgetClass);
+
+			// 버튼 이벤트 바인딩
+			if (USpartaGameInstance* GameInstance = GetGameInstance<USpartaGameInstance>())
+			{
+				// 게임 시작 버튼
+				if (UButton* StartGameButton = Cast<UButton>(MainMenuWidget->GetWidgetFromName(StartGameButtonWidgetName)))
+				{
+					StartGameButton->OnClicked.AddDynamic(
+						GameInstance,
+						&USpartaGameInstance::StartGame);
+				}
+				// 리더보드 버튼
+				if (UButton* ShowLeaderboardButton = Cast<UButton>(MainMenuWidget->GetWidgetFromName(ShowLeaderboardButtonWidgetName)))
+				{
+					// TODO: 리더보드 띄우기 기능 바인딩
+				}
+				// 게임 종료 버튼
+				if (UButton* ExitGameButton = Cast<UButton>(MainMenuWidget->GetWidgetFromName(ExitGameButtonWidgetName)))
+				{
+					ExitGameButton->OnClicked.AddDynamic(
+						GameInstance,
+						&USpartaGameInstance::ExitGame);
+				}
+			}
 		}
 	}
 
