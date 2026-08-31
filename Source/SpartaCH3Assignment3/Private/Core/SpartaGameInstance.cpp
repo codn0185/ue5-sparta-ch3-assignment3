@@ -91,6 +91,11 @@ int32 USpartaGameInstance::GetCurrentStageIndex() const
 	return CurrentStageIndex;
 }
 
+int32 USpartaGameInstance::GetMaxStageIndex() const
+{
+	return StageDataTable->GetRowNames().Num();
+}
+
 int32 USpartaGameInstance::GetTotalScore() const
 {
 	return TotalScore;
