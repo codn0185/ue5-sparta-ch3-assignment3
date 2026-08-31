@@ -38,6 +38,8 @@ class SPARTACH3ASSIGNMENT3_API USpartaGameInstance : public UGameInstance
   public:
 	USpartaGameInstance();
 
+	virtual void Init() override;
+
 	UFUNCTION(BlueprintCallable, Category = "Game|Flows")
 	void StartMainMenu();
 

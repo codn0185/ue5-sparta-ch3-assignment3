@@ -13,6 +13,11 @@ USpartaGameInstance::USpartaGameInstance()
 {
 }
 
+void USpartaGameInstance::Init()
+{
+	StartMainMenu();
+}
+
 void USpartaGameInstance::StartMainMenu()
 {
 	CurrentGameState = EGameState::MainMenu;
