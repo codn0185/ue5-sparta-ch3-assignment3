@@ -38,14 +38,6 @@ class SPARTACH3ASSIGNMENT3_API ASpartaPlayerController : public APlayerControlle
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "UI|MainMenu")
 	UUserWidget* MainMenuWidget;
 
-	// MainMenu Buttons
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "UI|MainMenu|Buttons")
-	FName StartGameButtonWidgetName;
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "UI|MainMenu|Buttons")
-	FName ShowLeaderboardButtonWidgetName;
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "UI|MainMenu|Buttons")
-	FName ExitGameButtonWidgetName;
-
 	// UI - GameOver
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI|GameOver")
 	TSubclassOf<UUserWidget> GameOverWidgetClass;
@@ -63,6 +55,18 @@ class SPARTACH3ASSIGNMENT3_API ASpartaPlayerController : public APlayerControlle
 	TSubclassOf<UUserWidget> GameHUDWidgetClass;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "UI|GameHUD")
 	UUserWidget* GameHUDWidget;
+
+	// UI Buttons
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "UI|Buttons")
+	FName StartGameButtonWidgetName;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "UI|Buttons")
+	FName ShowLeaderboardButtonWidgetName;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "UI|Buttons")
+	FName ExitGameButtonWidgetName;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "UI|Buttons")
+	FName RestartGameButtonWidgetName;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "UI|Buttons")
+	FName MainMenuButtonWidgetName;
 
 	// GameHUD Widgets
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "UI|GameHUD|Widgets|Stage")

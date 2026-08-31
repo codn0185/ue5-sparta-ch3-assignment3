@@ -137,6 +137,32 @@ void ASpartaPlayerController::ShowGameOver()
 		if (GameOverWidgetClass)
 		{
 			GameOverWidget = CreateWidget<UUserWidget>(this, GameOverWidgetClass);
+
+			// 버튼 이벤트 바인딩
+			if (USpartaGameInstance* GameInstance = GetGameInstance<USpartaGameInstance>())
+			{
+				// 게임 재시작 버튼
+				if (UButton* RestartGameButton = Cast<UButton>(GameOverWidget->GetWidgetFromName(RestartGameButtonWidgetName)))
+				{
+					RestartGameButton->OnClicked.AddDynamic(
+						GameInstance,
+						&USpartaGameInstance::StartGame);
+				}
+				// 메인메뉴 버튼
+				if (UButton* MainMenuButton = Cast<UButton>(GameOverWidget->GetWidgetFromName(MainMenuButtonWidgetName)))
+				{
+					MainMenuButton->OnClicked.AddDynamic(
+						GameInstance,
+						&USpartaGameInstance::StartMainMenu);
+				}
+				// 게임 종료 버튼
+				if (UButton* ExitGameButton = Cast<UButton>(GameOverWidget->GetWidgetFromName(ExitGameButtonWidgetName)))
+				{
+					ExitGameButton->OnClicked.AddDynamic(
+						GameInstance,
+						&USpartaGameInstance::ExitGame);
+				}
+			}
 		}
 	}
 
@@ -168,6 +194,32 @@ void ASpartaPlayerController::ShowGameClear()
 		if (GameClearWidgetClass)
 		{
 			GameClearWidget = CreateWidget<UUserWidget>(this, GameClearWidgetClass);
+
+			// 버튼 이벤트 바인딩
+			if (USpartaGameInstance* GameInstance = GetGameInstance<USpartaGameInstance>())
+			{
+				// 게임 재시작 버튼
+				if (UButton* RestartGameButton = Cast<UButton>(GameClearWidget->GetWidgetFromName(RestartGameButtonWidgetName)))
+				{
+					RestartGameButton->OnClicked.AddDynamic(
+						GameInstance,
+						&USpartaGameInstance::StartGame);
+				}
+				// 메인메뉴 버튼
+				if (UButton* MainMenuButton = Cast<UButton>(GameClearWidget->GetWidgetFromName(MainMenuButtonWidgetName)))
+				{
+					MainMenuButton->OnClicked.AddDynamic(
+						GameInstance,
+						&USpartaGameInstance::StartMainMenu);
+				}
+				// 게임 종료 버튼
+				if (UButton* ExitGameButton = Cast<UButton>(GameClearWidget->GetWidgetFromName(ExitGameButtonWidgetName)))
+				{
+					ExitGameButton->OnClicked.AddDynamic(
+						GameInstance,
+						&USpartaGameInstance::ExitGame);
+				}
+			}
 		}
 	}
 
