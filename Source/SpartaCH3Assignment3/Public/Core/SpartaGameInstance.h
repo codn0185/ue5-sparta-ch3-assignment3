@@ -8,12 +8,24 @@
 
 struct FStageDataRow;
 
+UENUM()
+enum class EGameState
+{
+	MainMenu,
+	Playing,
+	GameOver,
+	GameClear,
+};
+
 UCLASS()
 class SPARTACH3ASSIGNMENT3_API USpartaGameInstance : public UGameInstance
 {
 	GENERATED_BODY()
 
   protected:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Game|State")
+	EGameState CurrentGameState;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Game|Data")
 	TObjectPtr<UDataTable> StageDataTable;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Game|Data")

@@ -4,7 +4,8 @@
 #include "Kismet/GameplayStatics.h"
 
 USpartaGameInstance::USpartaGameInstance()
-	: StageDataTable(nullptr),
+	: CurrentGameState(EGameState::MainMenu),
+	  StageDataTable(nullptr),
 	  CurrentStageIndex(0),
 	  TotalScore(0)
 {
@@ -13,6 +14,8 @@ USpartaGameInstance::USpartaGameInstance()
 void USpartaGameInstance::StartGame()
 {
 	UE_LOG(LogTemp, Warning, TEXT("USpartaGameInstance::StartGame()"));
+
+	CurrentGameState = EGameState::Playing;
 
 	CurrentStageIndex = 0;
 	TotalScore = 0;
@@ -56,12 +59,16 @@ void USpartaGameInstance::OnGameOver()
 {
 	// 게임 오버
 	UE_LOG(LogTemp, Warning, TEXT("USpartaGameInstance::OnGameOver()"));
+
+	CurrentGameState = EGameState::GameOver;
 }
 
 void USpartaGameInstance::OnGameClear()
 {
 	// 게임 클리어
 	UE_LOG(LogTemp, Warning, TEXT("USpartaGameInstance::OnGameClear()"));
+
+	CurrentGameState = EGameState::GameClear;
 }
 
 void USpartaGameInstance::AddScore(int32 Score)
