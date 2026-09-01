@@ -6,9 +6,7 @@
 
 #include "MainMenu.generated.h"
 
-class UStartGameButtonWidget;
-class UShowLeaderboardButtonWidget;
-class UExitGameButtonWidget;
+class UUserWidget;
 
 UCLASS()
 class SPARTACH3ASSIGNMENT3_API UMainMenu : public UUserWidget
@@ -17,9 +15,9 @@ class SPARTACH3ASSIGNMENT3_API UMainMenu : public UUserWidget
 
   protected:
 	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UStartGameButtonWidget> StartGameButton;
+	TObjectPtr<UUserWidget> StartGameButton;
 	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UShowLeaderboardButtonWidget> ShowLeaderboardButton;
+	TObjectPtr<UUserWidget> ShowLeaderboardButton;
 	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UExitGameButtonWidget> ExitGameButton;
+	TObjectPtr<UUserWidget> ExitGameButton;
 };
