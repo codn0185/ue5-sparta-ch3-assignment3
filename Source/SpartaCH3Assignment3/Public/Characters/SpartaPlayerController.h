@@ -58,18 +58,6 @@ class SPARTACH3ASSIGNMENT3_API ASpartaPlayerController : public APlayerControlle
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "UI|GameHUD")
 	UGameHUD* GameHUDWidget;
 
-	// UI Buttons
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "UI|Buttons")
-	FName StartGameButtonWidgetName;
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "UI|Buttons")
-	FName ShowLeaderboardButtonWidgetName;
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "UI|Buttons")
-	FName ExitGameButtonWidgetName;
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "UI|Buttons")
-	FName RestartGameButtonWidgetName;
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "UI|Buttons")
-	FName MainMenuButtonWidgetName;
-
   protected:
 	virtual void BeginPlay() override;
 
