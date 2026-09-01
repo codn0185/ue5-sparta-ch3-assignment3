@@ -16,6 +16,8 @@ AMineItem::AMineItem()
 
 void AMineItem::Activate(AActor* Activator)
 {
+	Super::Activate(Activator);
+
 	// 이미 타이머 활성화 중이면 무시
 	if (ExplosionTimerHandle.IsValid()) return;
 

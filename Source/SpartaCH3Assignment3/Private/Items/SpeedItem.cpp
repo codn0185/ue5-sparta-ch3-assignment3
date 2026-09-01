@@ -11,6 +11,8 @@ ASpeedItem::ASpeedItem()
 
 void ASpeedItem::Activate(AActor* Activator)
 {
+	Super::Activate(Activator);
+
 	if (IsValid(Activator) && Activator->ActorHasTag("Player"))
 	{
 		if (ASpartaCharacter* Player = Cast<ASpartaCharacter>(Activator))

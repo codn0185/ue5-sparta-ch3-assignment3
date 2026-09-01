@@ -10,6 +10,8 @@ ACoinItem::ACoinItem()
 
 void ACoinItem::Activate(AActor* Activator)
 {
+	Super::Activate(Activator);
+
 	if (IsValid(Activator) && Activator->ActorHasTag("Player"))
 	{
 		if (UWorld* World = GetWorld())
