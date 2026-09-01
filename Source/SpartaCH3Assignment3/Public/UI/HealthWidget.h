@@ -15,11 +15,11 @@ class SPARTACH3ASSIGNMENT3_API UHealthWidget : public UUserWidget
 	GENERATED_BODY()
 
   protected:
-	UPROPERTY(meta = (BindWidget))
+	UPROPERTY(meta = (BindWidgetOptional))
 	TObjectPtr<UTextBlock> HealthText;
-	UPROPERTY(meta = (BindWidget))
+	UPROPERTY(meta = (BindWidgetOptional))
 	TObjectPtr<UTextBlock> MaxHealthText;
-	UPROPERTY(meta = (BindWidget))
+	UPROPERTY(meta = (BindWidgetOptional))
 	TObjectPtr<UProgressBar> HealthProgressBar;
 
   public:
