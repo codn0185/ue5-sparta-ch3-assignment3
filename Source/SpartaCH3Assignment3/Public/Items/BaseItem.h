@@ -24,6 +24,14 @@ class SPARTACH3ASSIGNMENT3_API ABaseItem : public AActor, public IInteractableIn
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	UStaticMeshComponent* StaticMesh;
 
+	// VFX & SFX
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FX")
+	UParticleSystem* PickupParticle;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FX")
+	USoundBase* PickupSound;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FX")
+	float PickupParticleDuration;
+
 	// Properties
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Properties")
 	FName Type;

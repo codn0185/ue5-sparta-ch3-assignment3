@@ -1,6 +1,8 @@
 #include "Items/BaseItem.h"
 
 #include "Components/SphereComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "Particles/ParticleSystemComponent.h"
 
 ABaseItem::ABaseItem()
 {
@@ -17,6 +19,11 @@ ABaseItem::ABaseItem()
 	// 오버랩 이벤트 바인딩
 	RootCollision->OnComponentBeginOverlap.AddDynamic(this, &ABaseItem::OnBeginOverlap);
 	RootCollision->OnComponentEndOverlap.AddDynamic(this, &ABaseItem::OnEndOverlap);
+
+	// VFX & SFX
+	PickupParticle = nullptr;
+	PickupSound = nullptr;
+	PickupParticleDuration = 2.f;
 }
 
 void ABaseItem::OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
@@ -33,6 +40,40 @@ void ABaseItem::OnEndOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherA
 
 void ABaseItem::Activate(AActor* Activator)
 {
+	// 파티클
+	if (PickupParticle)
+	{
+		// 파티클 컴포넌트 생성
+		UParticleSystemComponent* PickupParticleComp = UGameplayStatics::SpawnEmitterAtLocation(
+			GetWorld(),
+			PickupParticle,
+			GetActorLocation(),
+			GetActorRotation(),
+			false);
+
+		// 파티클 제거
+		if (PickupParticleComp)
+		{
+			FTimerHandle DestroyParticleTimerHandle;
+			GetWorld()->GetTimerManager().SetTimer(
+				DestroyParticleTimerHandle,
+				[PickupParticleComp]()
+				{
+					PickupParticleComp->DestroyComponent();
+				},
+				PickupParticleDuration,
+				false);
+		}
+	}
+
+	// 사운드
+	if (PickupSound)
+	{
+		UGameplayStatics::PlaySoundAtLocation(
+			GetWorld(),
+			PickupSound,
+			GetActorLocation());
+	}
 }
 
 FName ABaseItem::GetType() const
