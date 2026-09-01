@@ -5,9 +5,11 @@
 #include "Camera/CameraComponent.h"
 #include "Characters/SpartaPlayerController.h"
 #include "Components/CapsuleComponent.h"
+#include "Components/WidgetComponent.h"
 #include "Core/SpartaGameState.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "UI/HealthWidget.h"
 
 ASpartaCharacter::ASpartaCharacter()
 {
@@ -24,6 +26,10 @@ ASpartaCharacter::ASpartaCharacter()
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	Camera->SetupAttachment(SpringArm, USpringArmComponent::SocketName);
 	Camera->bUsePawnControlRotation = false;
+
+	OverheadWidget = CreateDefaultSubobject<UWidgetComponent>("Overhead Widget");
+	OverheadWidget->SetupAttachment(GetMesh());
+	OverheadWidget->SetWidgetSpace(EWidgetSpace::Screen);
 
 	// Controller Settings
 	bUseControllerRotationPitch = false;
@@ -75,6 +81,19 @@ int32 ASpartaCharacter::GetMaxHealth() const
 int32 ASpartaCharacter::GetHealth() const
 {
 	return Health;
+}
+
+void ASpartaCharacter::UpdateOverheadWidgetHealth()
+{
+	if (!OverheadWidget)
+	{
+		return;
+	}
+
+	if (UHealthWidget* HealthWidget = Cast<UHealthWidget>(OverheadWidget->GetUserWidgetObject()))
+	{
+		HealthWidget->SetHealth(Health, MaxHealth);
+	}
 }
 
 void ASpartaCharacter::ApplySpeedEffect(float Multiplier, float Duration)

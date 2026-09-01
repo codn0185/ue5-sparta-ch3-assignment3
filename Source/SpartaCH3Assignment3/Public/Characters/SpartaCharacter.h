@@ -8,6 +8,7 @@
 
 class USpringArmComponent;
 class UCameraComponent;
+class UWidgetComponent;
 
 struct FInputActionValue;
 
@@ -41,6 +42,8 @@ class SPARTACH3ASSIGNMENT3_API ASpartaCharacter : public ACharacter
 	USpringArmComponent* SpringArm;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components|Camera")
 	UCameraComponent* Camera;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Components|UI")
+	UWidgetComponent* OverheadWidget;
 
 	// Properties
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Properties|Health")
@@ -77,6 +80,8 @@ class SPARTACH3ASSIGNMENT3_API ASpartaCharacter : public ACharacter
 	int32 GetMaxHealth() const;  // 최대 체력 반환
 	UFUNCTION(BlueprintPure, Category = "Properties|Health")
 	int32 GetHealth() const;  // 현재 체력 반환
+
+	void UpdateOverheadWidgetHealth();
 
 	// Effects
 	UFUNCTION(BlueprintCallable, Category = "Effects|Speed")
