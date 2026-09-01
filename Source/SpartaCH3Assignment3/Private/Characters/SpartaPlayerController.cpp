@@ -9,6 +9,7 @@
 #include "Core/SpartaGameInstance.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "UI/GameHUD.h"
 
 ASpartaPlayerController::ASpartaPlayerController()
 	:  // IMC & IA
@@ -267,7 +268,7 @@ bool ASpartaPlayerController::InitializeGameHUD()
 		return false;
 	}
 
-	GameHUDWidget = CreateWidget<UUserWidget>(this, GameHUDWidgetClass);
+	GameHUDWidget = CreateWidget<UGameHUD>(this, GameHUDWidgetClass);
 	return GameHUDWidget != nullptr;
 }
 
@@ -304,14 +305,7 @@ void ASpartaPlayerController::UpdateGameHUDStage(FName StageName, int32 StageNum
 		return;
 	}
 
-	if (UTextBlock* StageNameText = Cast<UTextBlock>(GameHUDWidget->GetWidgetFromName(StageNameTextWidgetName)))
-	{
-		StageNameText->SetText(FText::FromName(StageName));
-	}
-	if (UTextBlock* StageNumberText = Cast<UTextBlock>(GameHUDWidget->GetWidgetFromName(StageNumberTextWidgetName)))
-	{
-		StageNumberText->SetText(FText::AsNumber(StageNumber));
-	}
+	GameHUDWidget->SetStage(StageName, StageNumber);
 }
 
 void ASpartaPlayerController::UpdateGameHUDWave(int32 WaveNumber, int32 MaxWaveNumber)
@@ -321,14 +315,7 @@ void ASpartaPlayerController::UpdateGameHUDWave(int32 WaveNumber, int32 MaxWaveN
 		return;
 	}
 
-	if (UTextBlock* WaveNumberText = Cast<UTextBlock>(GameHUDWidget->GetWidgetFromName(WaveNumberTextWidgetName)))
-	{
-		WaveNumberText->SetText(FText::AsNumber(WaveNumber));
-	}
-	if (UTextBlock* MaxWaveNumberText = Cast<UTextBlock>(GameHUDWidget->GetWidgetFromName(MaxWaveNumberTextWidgetName)))
-	{
-		MaxWaveNumberText->SetText(FText::AsNumber(MaxWaveNumber));
-	}
+	GameHUDWidget->SetWave(WaveNumber, MaxWaveNumber);
 }
 
 void ASpartaPlayerController::UpdateGameHUDTime(float RemainingTime, float TotalTime)
@@ -338,17 +325,7 @@ void ASpartaPlayerController::UpdateGameHUDTime(float RemainingTime, float Total
 		return;
 	}
 
-	if (UTextBlock* RemainingTimeText = Cast<UTextBlock>(GameHUDWidget->GetWidgetFromName(RemainingTimeTextWidgetName)))
-	{
-		RemainingTimeText->SetText(FText::FromString(FString::Printf(TEXT("%.1f"), RemainingTime)));
-	}
-	if (UProgressBar* TimeProgressBar = Cast<UProgressBar>(GameHUDWidget->GetWidgetFromName(TimeProgressBarWidgetName)))
-	{
-		const float TimePercentage = TotalTime > 0.f
-										 ? FMath::Clamp(RemainingTime / TotalTime, 0.f, 1.f)
-										 : 0.f;
-		TimeProgressBar->SetPercent(TimePercentage);
-	}
+	GameHUDWidget->SetTime(RemainingTime, TotalTime);
 }
 
 void ASpartaPlayerController::UpdateGameHUDScore(int32 Score)
@@ -358,10 +335,7 @@ void ASpartaPlayerController::UpdateGameHUDScore(int32 Score)
 		return;
 	}
 
-	if (UTextBlock* ScoreText = Cast<UTextBlock>(GameHUDWidget->GetWidgetFromName(ScoreTextWidgetName)))
-	{
-		ScoreText->SetText(FText::AsNumber(Score));
-	}
+	GameHUDWidget->SetScore(Score);
 }
 
 void ASpartaPlayerController::UpdateGameHUDCoin(int32 CollectedCoinCount, int32 TotalCoinCount)
@@ -371,14 +345,7 @@ void ASpartaPlayerController::UpdateGameHUDCoin(int32 CollectedCoinCount, int32 
 		return;
 	}
 
-	if (UTextBlock* CollectedCoinCountText = Cast<UTextBlock>(GameHUDWidget->GetWidgetFromName(CollectedCoinCountTextWidgetName)))
-	{
-		CollectedCoinCountText->SetText(FText::AsNumber(CollectedCoinCount));
-	}
-	if (UTextBlock* TotalCoinCountText = Cast<UTextBlock>(GameHUDWidget->GetWidgetFromName(TotalCoinCountTextWidgetName)))
-	{
-		TotalCoinCountText->SetText(FText::AsNumber(TotalCoinCount));
-	}
+	GameHUDWidget->SetCoin(CollectedCoinCount, TotalCoinCount);
 }
 
 void ASpartaPlayerController::UpdateGameHUDHealth(int32 Health, int32 MaxHealth)
@@ -388,21 +355,7 @@ void ASpartaPlayerController::UpdateGameHUDHealth(int32 Health, int32 MaxHealth)
 		return;
 	}
 
-	if (UTextBlock* HealthText = Cast<UTextBlock>(GameHUDWidget->GetWidgetFromName(HealthTextWidgetName)))
-	{
-		HealthText->SetText(FText::AsNumber(Health));
-	}
-	if (UTextBlock* MaxHealthText = Cast<UTextBlock>(GameHUDWidget->GetWidgetFromName(MaxHealthTextWidgetName)))
-	{
-		MaxHealthText->SetText(FText::AsNumber(MaxHealth));
-	}
-	if (UProgressBar* HealthProgressBar = Cast<UProgressBar>(GameHUDWidget->GetWidgetFromName(HealthProgressBarWidgetName)))
-	{
-		const float HealthPercentage = MaxHealth > 0
-										   ? FMath::Clamp(1.f * Health / MaxHealth, 0.f, 1.f)
-										   : 0.f;
-		HealthProgressBar->SetPercent(HealthPercentage);
-	}
+	GameHUDWidget->SetHealth(Health, MaxHealth);
 }
 
 void ASpartaPlayerController::UpdateGameHUDEffect()

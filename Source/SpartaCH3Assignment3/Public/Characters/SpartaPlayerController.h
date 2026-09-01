@@ -11,6 +11,8 @@ class UInputAction;
 
 class UUserWidget;
 
+class UGameHUD;
+
 UCLASS()
 class SPARTACH3ASSIGNMENT3_API ASpartaPlayerController : public APlayerController
 {
@@ -52,9 +54,9 @@ class SPARTACH3ASSIGNMENT3_API ASpartaPlayerController : public APlayerControlle
 
 	// UI - GameHUD
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI|GameHUD")
-	TSubclassOf<UUserWidget> GameHUDWidgetClass;
+	TSubclassOf<UGameHUD> GameHUDWidgetClass;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "UI|GameHUD")
-	UUserWidget* GameHUDWidget;
+	UGameHUD* GameHUDWidget;
 
 	// UI Buttons
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "UI|Buttons")
@@ -67,37 +69,6 @@ class SPARTACH3ASSIGNMENT3_API ASpartaPlayerController : public APlayerControlle
 	FName RestartGameButtonWidgetName;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "UI|Buttons")
 	FName MainMenuButtonWidgetName;
-
-	// GameHUD Widgets
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "UI|GameHUD|Widgets|Stage")
-	FName StageNameTextWidgetName;
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "UI|GameHUD|Widgets|Stage")
-	FName StageNumberTextWidgetName;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "UI|GameHUD|Widgets|Wave")
-	FName WaveNumberTextWidgetName;
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "UI|GameHUD|Widgets|Wave")
-	FName MaxWaveNumberTextWidgetName;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "UI|GameHUD|Widgets|Time")
-	FName RemainingTimeTextWidgetName;
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "UI|GameHUD|Widgets|Time")
-	FName TimeProgressBarWidgetName;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "UI|GameHUD|Widgets|Score")
-	FName ScoreTextWidgetName;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "UI|GameHUD|Widgets|Coin")
-	FName CollectedCoinCountTextWidgetName;
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "UI|GameHUD|Widgets|Coin")
-	FName TotalCoinCountTextWidgetName;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "UI|GameHUD|Widgets|Health")
-	FName HealthTextWidgetName;
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "UI|GameHUD|Widgets|Health")
-	FName MaxHealthTextWidgetName;
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "UI|GameHUD|Widgets|Health")
-	FName HealthProgressBarWidgetName;
 
   protected:
 	virtual void BeginPlay() override;
