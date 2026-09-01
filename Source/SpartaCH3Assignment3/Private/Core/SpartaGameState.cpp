@@ -149,14 +149,14 @@ void ASpartaGameState::EndWave()
 	UE_LOG(LogTemp, Warning, TEXT("ASpartaGameState::EndWave()"));
 
 	// 이전 웨이브 액터 제거
-	for (AActor *Actor : WaveActors)
+	TArray<TObjectPtr<AActor>> ActorsToDestroy = MoveTemp(WaveActors);
+	for (TObjectPtr<AActor> Actor : ActorsToDestroy)
 	{
 		if (IsValid(Actor))
 		{
 			Actor->Destroy();
 		}
 	}
-	WaveActors.Empty();
 
 	// 이전 웨이브 타이머 초기화
 	GetWorldTimerManager().ClearTimer(WaveTimerHandle);
