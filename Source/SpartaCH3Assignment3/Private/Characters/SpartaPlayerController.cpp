@@ -3,6 +3,7 @@
 #include "EnhancedInputSubsystems.h"
 
 #include "Blueprint/UserWidget.h"
+#include "Characters/SpartaCharacter.h"
 #include "Components/Button.h"
 #include "Components/ProgressBar.h"
 #include "Components/TextBlock.h"
@@ -274,12 +275,15 @@ void ASpartaPlayerController::UpdateGameHUDCoin(int32 CollectedCoinCount, int32 
 
 void ASpartaPlayerController::UpdateGameHUDHealth(int32 Health, int32 MaxHealth)
 {
-	if (!InitializeGameHUD())
+	if (InitializeGameHUD())
 	{
-		return;
+		GameHUDWidget->SetHealth(Health, MaxHealth);
 	}
 
-	GameHUDWidget->SetHealth(Health, MaxHealth);
+	if (ASpartaCharacter* PlayerCharacter = GetPawn<ASpartaCharacter>())
+	{
+		PlayerCharacter->UpdateOverheadWidgetHealth();
+	}
 }
 
 void ASpartaPlayerController::UpdateGameHUDEffect()
