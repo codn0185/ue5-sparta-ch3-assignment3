@@ -2,6 +2,7 @@
 
 #include "Components/SphereComponent.h"
 #include "Kismet/GamePlayStatics.h"
+#include "Particles/ParticleSystemComponent.h"
 
 AMineItem::AMineItem()
 {
@@ -9,13 +10,25 @@ AMineItem::AMineItem()
 	ExplosionCollsion->SetupAttachment(RootComponent);
 	ExplosionCollsion->SetCollisionProfileName(TEXT("OverlapAllDynamic"));
 
+	ExplosionParticle = nullptr;
+	ExplosionSound = nullptr;
+	ExplosionParticleDuration = 1.f;
+
 	ExplosionDelay = 3.f;
 	ExplosionDamage = 30;
+	bIsTriggered = false;
 	Type = "Mine";
 }
 
 void AMineItem::Activate(AActor* Activator)
 {
+	if (bIsTriggered)
+	{
+		return;
+	}
+
+	bIsTriggered = true;
+
 	Super::Activate(Activator);
 
 	// 이미 타이머 활성화 중이면 무시
@@ -32,6 +45,41 @@ void AMineItem::Activate(AActor* Activator)
 
 void AMineItem::Explode()
 {
+	// 파티클
+	if (ExplosionParticle)
+	{
+		// 파티클 컴포넌트 생성
+		UParticleSystemComponent* ExplosionParticleComp = UGameplayStatics::SpawnEmitterAtLocation(
+			GetWorld(),
+			ExplosionParticle,
+			GetActorLocation(),
+			GetActorRotation(),
+			false);
+
+		// 파티클 제거
+		if (ExplosionParticleComp)
+		{
+			FTimerHandle DestroyParticleTimerHandle;
+			GetWorld()->GetTimerManager().SetTimer(
+				DestroyParticleTimerHandle,
+				[ExplosionParticleComp]()
+				{
+					ExplosionParticleComp->DestroyComponent();
+				},
+				ExplosionParticleDuration,
+				false);
+		}
+	}
+
+	// 사운드
+	if (ExplosionSound)
+	{
+		UGameplayStatics::PlaySoundAtLocation(
+			GetWorld(),
+			ExplosionSound,
+			GetActorLocation());
+	}
+
 	// 범위 내 액터 확인
 	TArray<AActor*> OverlappingActors;
 	ExplosionCollsion->GetOverlappingActors(OverlappingActors);
